@@ -1,0 +1,37 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+codecov = "*"
+unittest2 = "*"
+
+[packages]
+dj-database-url = "*"
+Django = ">=3.1"
+djangorestframework = ">=3.11"
+django-cors-headers = ">=3.2.1"
+django-debug-toolbar = ">=2.2"
+django-filter = ">=2.4.0"
+django-guardian = "*"
+djangorestframework-guardian = "==0.3.0"
+django-multiselectfield = "*"
+django-oauth-toolkit = "*"
+django-storages = "*"
+drf-writable-nested = "*"
+fcm-django = "*"
+gunicorn = "*"
+psycopg2-binary = ">=2.8.4"
+pytz = "*"
+sentry-sdk = "*"
+python-dateutil = "*"
+social-auth-app-django = "*"
+django-environ = "*"
+django-tailwind = "*"
+drf-spectacular = "*"
+django-redis = "*"
+
+[requires]
+python_version = "3.8"

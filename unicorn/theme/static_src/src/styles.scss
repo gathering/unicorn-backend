@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.alert {
+  @apply px-4 py-2 mb-2 relative font-light;
+}
+
+.alert .close {
+  @apply absolute top-0 right-0 m-2;
+}
+
+.alert-error, .alert.error {
+  @apply bg-red-200 text-red-900;
+}
+.alert-danger, .alert.danger {
+  @apply bg-red-200 text-red-900;
+}
+.alert-warning, .alert.warning {
+  @apply bg-yellow-200 text-yellow-900;
+}
+.alert-success, .alert.success {
+  @apply bg-green-200 text-green-900;
+}
+.alert-info, .alert.info {
+  @apply bg-blue-200 text-blue-900;
+}
+.alert-debug, .alert.debug {
+  @apply bg-red-600 text-red-100;
+}
+
+.fancy-checkbox input {
+  @apply absolute;
+  left: -9999px;
+}
+.fancy-checkbox input:checked ~ .checked {
+  @apply block;
+}
+.fancy-checkbox input:checked ~ .unchecked {
+  @apply hidden;
+}
+.fancy-checkbox input:not(checked) ~ .checked {
+  @apply hidden;
+}
+.fancy-checkbox input:not(checked) ~ .unchecked {
+  @apply block;
+}

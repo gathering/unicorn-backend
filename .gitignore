@@ -1,0 +1,14 @@
+*.pyc
+/unicorn/static
+.idea
+*.swp
+gunicorn_config.py
+venv/
+/unicorn/media
+/unicorn/upload
+.coverage
+htmlcov/
+.vscode/*
+node_modules/
+static/
+.env

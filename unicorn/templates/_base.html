@@ -1,0 +1,26 @@
+{% extends "_skeleton.html" %}
+{% load static %}
+
+{% block body %}
+    <nav class="bg-white shadow mb-4">
+        <div class="flex flex-row justify-between h-16 mx-auto px-2 max-w-screen-desktop">
+            <div>
+                <img class="h-16 w-16" src="{% static 'img/tg_logo_liten.png' %}" alt="Logo" />
+            </div>
+            <div class="flex justify-center h-full">
+                <!--<a href="{% url 'accounts:login' %}" class="inline-flex items-center px-1 pt-1 border-b-2 font-light leading-8 text-black border-logo-primary">Log In</a>-->
+            </div>
+            <div class="h-full flex flex-row-reverse items-center mr-1">
+                <img class="inline-flex w-12 rounded-full" src="{% static 'img/avatar_anon.svg' %}" alt="Avatar" />
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+        <div class="mx-2">
+            {% include "_messages.html" with messages=messages %}
+        </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+{% endblock %}
