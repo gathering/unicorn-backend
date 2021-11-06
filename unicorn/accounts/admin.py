@@ -22,9 +22,9 @@ class ExtendedUserAdmin(UserAdmin):
         "is_active",
     )
     list_display = (
+        "username",
         "last_name",
         "first_name",
-        "username",
         "email",
         "display_name",
         "is_active",
@@ -66,7 +66,15 @@ class ExtendedUserAdmin(UserAdmin):
         ),
         (
             _("Event related info"),
-            {"fields": ("display_name_format", ("row", "seat"), "checked_in", "crew", "role")},
+            {
+                "fields": (
+                    "display_name_format",
+                    ("row", "seat"),
+                    "checked_in",
+                    "crew",
+                    "role",
+                )
+            },
         ),
         (
             _("Permissions"),

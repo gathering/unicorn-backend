@@ -314,7 +314,7 @@ SPECTACULAR_SETTINGS = {
         # "url": "https://gathering.slack.com/",
         "url": "slack://channel?id=G72J7R8R0&team=T02BLBLFZ",
     },
-    "SCHEMA_PATH_PREFIX": r'/api/',
+    "SCHEMA_PATH_PREFIX": r"/api/",
     "OAUTH2_FLOWS": ["authorizationCode"],
     "OAUTH2_AUTHORIZATION_URL": ALLOWED_HOSTS[0] + "oauth2/authorize/",
     "OAUTH2_TOKEN_URL": ALLOWED_HOSTS[0] + "oauth2/token/",
@@ -325,12 +325,12 @@ SPECTACULAR_SETTINGS = {
 INTERNAL_IPS = ("127.0.0.1", "::1")
 
 OAUTH2_PROVIDER = {
-    'SCOPES': {
-        'identity': 'Basic identity information',
-        'email': 'Contact information',
+    "SCOPES": {
+        "identity": "Basic identity information",
+        "email": "Contact information",
     },
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 60 * 60,
-    'REFRESH_TOKEN_EXPIRE_SECONDS': 60 * 60 * 24 * 5,
+    "ACCESS_TOKEN_EXPIRE_SECONDS": 60 * 60,
+    "REFRESH_TOKEN_EXPIRE_SECONDS": 60 * 60 * 24 * 5,
 }
 
 
