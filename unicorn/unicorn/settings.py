@@ -102,7 +102,9 @@ ANONYMOUS_USER_NAME = "Anonymous"
 GUARDIAN_GET_INIT_ANONYMOUS_USER = "utilities.permissions.get_anonymous_user_instance"
 GUARDIAN_MONKEY_PATCH = False
 
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SESSION_COOKIE_AGE = env("SESSION_COOKIE_AGE", default=60 * 60 * 24 * 30)
 CONSENT_DURATION = env("CONSENT_DURATION", default=60 * 60 * 24 * 90)
