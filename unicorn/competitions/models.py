@@ -16,8 +16,9 @@ from .toornament import Match, Tournament
 
 
 class Genre(models.Model):
-    category = models.PositiveSmallIntegerField(
+    category = models.CharField(
         verbose_name=_("Category"),
+        max_length=16,
         choices=GENRE_CATEGORY_CHOICES,
         default=GENRE_CATEGORY_OTHER,
     )
