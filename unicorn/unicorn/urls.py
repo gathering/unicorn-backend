@@ -3,9 +3,14 @@ from django.contrib import admin
 from django.urls import include, path, re_path, reverse_lazy
 from django.views.generic.base import RedirectView
 from django.views.static import serve
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from unicorn.views import APIRootView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from zoodo_utils.tus.views import TusUpload
+
+from unicorn.views import APIRootView
 
 _patterns = [
     # Redirect random requests to API
@@ -21,10 +26,13 @@ _patterns = [
     path("api/competitions/", include("competitions.api.urls")),
     path("api/matchmaking/", include("matchmaking.api.urls")),
     # API Docs
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
+    path("api/openapi.yaml", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # Serving static media in Django to pipe it through LoginRequiredMiddleware
     path("media/<path>", serve, {"document_root": settings.MEDIA_ROOT}),
     # TUS Uploads
