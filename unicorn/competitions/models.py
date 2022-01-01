@@ -89,6 +89,13 @@ class Competition(CreatedUpdatedModel, models.Model):
         default=False,
         help_text=_("Visible for regular users"),
     )
+    visibility = models.CharField(
+        verbose_name=_("Visibility"),
+        max_length=16,
+        choices=COMEPTITION_VISIBILITY_CHOICES,
+        default=COMPETITION_VISIBILITY_PUBLIC,
+    )
+
     report_win_loss = models.BooleanField(
         verbose_name=_("Report wins/losses"),
         default=False,

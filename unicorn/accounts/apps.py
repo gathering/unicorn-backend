@@ -24,6 +24,9 @@ def create_default_groups(sender, **kwargs):
         Permission.objects.get(codename="add_contributor"),
     )
 
+    # group for default crew access
+    Group.objects.get_or_create(name="p-crew")
+
 
 class AccountsConfig(AppConfig):
     name = "accounts"

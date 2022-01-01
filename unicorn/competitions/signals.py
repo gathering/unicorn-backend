@@ -1,4 +1,5 @@
 from competitions.models import Competition, Contributor, Entry, File, Vote
+from competitions.constants import COMPETITION_VISIBILITY_HIDDEN, COMPETITION_VISIBILITY_PUBLIC, COMPETITION_VISIBILITY_CREW
 from django.contrib.auth.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -9,12 +10,31 @@ from zoodo_utils.tus.views import TusUpload
 
 @receiver(post_save, sender=Competition)
 def add_competition_view_published(sender, instance, created, **kwargs):
-    g = Group.objects.get(name="p-anonymous")
+    anon = Group.objects.get(name="p-anonymous")
+    crew = Group.objects.get(name="p-crew")
+    
+    # if visibility is set to hidden, we remove crew and anon permissions regardless if the action is publish or unpublish
+    if instance.visibility == COMPETITION_VISIBILITY_HIDDEN:
+        remove_perm("view_competition", anon, instance)
+        remove_perm("view_competition", crew, instance)
 
-    if instance.published:
-        assign_perm("view_competition", g, instance)
-    else:
-        remove_perm("view_competition", g, instance)
+    elif instance.visibility == COMPETITION_VISIBILITY_CREW:
+        # make sure to remove anon permissions
+        remove_perm("view_competition", anon, instance)
+
+        if instance.published:
+            assign_perm("view_competition", crew, instance)
+        else:
+            remove_perm("view_competition", crew, instance)
+
+    elif instance.visibility == COMPETITION_VISIBILITY_PUBLIC:
+        # make sure to remove crew permissions, keeping things tidy
+        remove_perm("view_competition", crew, instance)
+
+        if instance.published:
+            assign_perm("view_competition", anon, instance)
+        else:
+            remove_perm("view_competition", anon, instance)
 
 
 @receiver(post_save, sender=Competition)
