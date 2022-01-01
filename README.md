@@ -2,15 +2,9 @@
 <p align="center">Unified Net-based Interface for Competition Organization, Rules and News.</p>
 
 
-## Prerequisites
-- python 3.8
-- pipenv
-- docker (optional)
-
-
 ## Running with Docker 🐳
 
-To start UNICORN development in Docker, you have to install Docker on your computer. Then you can run `docker-compose up` from the project root.
+To start UNICORN development in Docker, you have to install Docker on your computer. Then you can run `docker-compose up -d` from the project root.
 
 When running for the first time, or after creating migrations, remember to also run `docker-compose exec web python /unicorn/unicorn/manage.py migrate`
 
@@ -18,6 +12,8 @@ Create first local superuser: `docker-compose exec web python /unicorn/unicorn/m
 
 
 ## Running locally
+
+0. Make sure you have Python 3.8 and pipenv installed
 
 1. Set PostgreSQL up locally
    1. Install Postgresql (e.g. with `brew install postgresql`)
@@ -33,6 +29,6 @@ Create first local superuser: `docker-compose exec web python /unicorn/unicorn/m
 
 ## Contributing
 
-Ensure you have `pre-commit` installed - `brew install pre-commit` (using brew is preferred - adding pre-commit dependencies to your Python environment can cause libraries versions to drift)
+Ensure you have `pre-commit` installed - `brew install pre-commit` (or replace brew with your package manager, such as yum or apt)
 
 Run `pre-commit install` (or `make setup`) to have it check your staged changes before allowing you to commit. To skip the pre-commit checks (usually not recommended, but helpful when you'd want to save WIP or similar), use `git commit --no-verify`.

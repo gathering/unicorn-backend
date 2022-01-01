@@ -1,0 +1,15 @@
+FROM python:3.8
+
+WORKDIR /unicorn
+RUN pip install pipenv
+
+COPY Pipfile.lock .
+COPY Pipfile .
+
+ENV PYTHON=python
+
+RUN pipenv install --system --deploy --ignore-pipfile
+
+COPY . .
+
+CMD python /unicorn/unicorn/manage.py runserver 0.0.0.0:8000
