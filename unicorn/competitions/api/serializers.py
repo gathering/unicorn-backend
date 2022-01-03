@@ -106,6 +106,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
             "participant_limit",
             "toornament",
             "published",
+            "visibility",
             "report_win_loss",
             "rsvp",
             "header_image",
