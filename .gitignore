@@ -10,6 +10,7 @@ venv/
 htmlcov/
 .vscode/*
 node_modules/
-static/
+static/*
+!theme/static
 .env
 .DS_Store
