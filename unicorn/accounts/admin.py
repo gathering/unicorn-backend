@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy
 
-from .models import User
+from .models import AutoCrew, User
 
 
 @admin.register(User)
@@ -122,3 +122,8 @@ class ExtendedUserAdmin(UserAdmin):
         )
 
     enable.short_description = _("Enable selected users")
+
+
+@admin.register(AutoCrew)
+class AutoCrewAdmin(admin.ModelAdmin):
+    pass

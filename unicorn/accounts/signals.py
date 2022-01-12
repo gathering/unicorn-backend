@@ -49,3 +49,15 @@ def build_discord_avatar_url(instance, **kwargs):
         instance.extra_data[
             "avatar"
         ] = f"https://cdn.discordapp.com/avatars/{instance.uid}/{avatar}.png"
+
+
+@receiver(post_save, sender=UserSocialAuth)
+def assign_crew_permissions_keycloak(instance, **kwargs):
+    if instance.provider != "keycloak":
+        return
+
+    # find groups for each of the crews the user is a member of and add them to them
+    for g in instance.extra_data.get("groups", []):
+        ac = AutoCrew.objects.filter(crew=g).prefetch_related()
+        for mapping in ac:
+            instance.user.groups.add(mapping.group)

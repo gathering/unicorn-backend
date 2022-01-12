@@ -32,3 +32,13 @@ Create first local superuser: `docker-compose exec web python /unicorn/unicorn/m
 Ensure you have `pre-commit` installed - `brew install pre-commit` (or replace brew with your package manager, such as yum or apt)
 
 Run `pre-commit install` (or `make setup`) to have it check your staged changes before allowing you to commit. To skip the pre-commit checks (usually not recommended, but helpful when you'd want to save WIP or similar), use `git commit --no-verify`.
+
+
+# Authentication providers
+## Keycloak
+1. Set up according to upstream docs: https://python-social-auth.readthedocs.io/en/latest/backends/keycloak.html
+2. Create a mapper to get group memberships
+   - Go to Clients -> [client name] -> Mappers
+   - Click Create
+   - Select "Group Membership" for Mapper Type
+   - Name the mapper "groups"
