@@ -71,7 +71,7 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 # Set to True to enable server debugging. WARNING: Debugging introduces a substantial performance penalty and may reveal
 # sensitive information about your installation. Only enable debugging while performing testing. Never enable debugging
 # on a production system.
-DEBUG = os.getenv("DEBUG", False)
+DEBUG = os.getenv("DEBUG", False)  # blank becomes false, anything truethy becomes true
 
 # Email settings
 EMAIL = {
