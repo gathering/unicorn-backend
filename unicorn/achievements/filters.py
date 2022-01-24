@@ -33,7 +33,7 @@ class LevelFilter(django_filters.FilterSet):
 class AchievementFilter(django_filters.FilterSet):
     id__in = NumericInFilter(field_name="id", lookup_expr="in")
     q = django_filters.CharFilter(method="search", label=_("Search"))
-    user = django_filters.NumberFilter(method="by_user", label=_("By User"))
+    user = django_filters.UUIDFilter(method="by_user", label=_("By User"))
 
     category = django_filters.ModelMultipleChoiceFilter(
         field_name="category", queryset=Category.objects.all(), label=_("Category")
@@ -58,6 +58,4 @@ class AchievementFilter(django_filters.FilterSet):
         ).distinct()
 
     def by_user(self, queryset, name, value):
-        if not str(value).isdecimal():
-            return queryset
-        return queryset.filter(Q(users__id=value)).distinct()
+        return queryset.filter(Q(users__uuid=value)).distinct()
