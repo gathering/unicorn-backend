@@ -90,6 +90,7 @@ class AwardViewSet(ModelViewSet):
     queryset = Award.objects.all()
     serializer_class = serializers.AwardSerializer
 
+    filterset_class = filters.AwardFilter
 
 class NfcStationViewSet(ModelViewSet):
     queryset = NfcStation.objects.all()

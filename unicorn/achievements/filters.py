@@ -59,3 +59,7 @@ class AchievementFilter(django_filters.FilterSet):
 
     def by_user(self, queryset, name, value):
         return queryset.filter(Q(users__uuid=value)).distinct()
+
+class AwardFilter(django_filters.FilterSet):
+    user = django_filters.UUIDFilter()
+    achievement = django_filters.NumberFilter()
