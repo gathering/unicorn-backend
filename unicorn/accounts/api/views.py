@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
@@ -49,3 +50,17 @@ class SearchView(ListAPIView):
             return User.objects.none()
 
         return User.objects.exclude(role=USER_ROLE_ANON)
+
+
+class MyGlobalPermissionsView(APIView):
+    
+
+    def get(self, request):
+        """
+        Return a list of all global permissions for the current user
+        """
+        user_perms = request.user.get_all_permissions()
+        anon_perms = User.get_anonymous().get_all_permissions()
+        perms = set.union(user_perms, anon_perms)
+
+        return Response(sorted(perms))
