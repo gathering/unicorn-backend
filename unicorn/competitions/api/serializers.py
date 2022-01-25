@@ -37,7 +37,7 @@ class GenreSerializer(ValidatedModelSerializer):
 
     class Meta:
         model = Genre
-        fields = ("obj_type", "id", "category", "name")
+        fields = ("obj_type", "permissions", "id", "category", "name")
 
 
 #
@@ -50,7 +50,7 @@ class FileSerializer(ValidatedModelSerializer):
 
     class Meta:
         model = File
-        fields = ("obj_type", "id", "url", "name", "type", "status", "active")
+        fields = ("obj_type", "permissions", "id", "url", "name", "type", "status", "active")
 
     def get_url(self, file) -> str:
         request = self.context.get("request")
@@ -93,6 +93,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
         model = Competition
         fields = [
             "obj_type",
+            "permissions",
             "id",
             "url",
             "genre",
@@ -183,6 +184,7 @@ class EntrySerializer(ValidatedModelSerializer):
         model = Entry
         fields = (
             "obj_type",
+            "permissions",
             "id",
             "url",
             "title",
@@ -288,7 +290,7 @@ class EntryVoteSerializer(ValidatedModelSerializer):
 class ContributorSerializer(ValidatedModelSerializer):
     class Meta:
         model = Contributor
-        fields = ("obj_type", "id", "entry", "user", "extra_info", "is_owner")
+        fields = ("obj_type", "permissions", "id", "entry", "user", "extra_info", "is_owner")
 
     def create(self, validated_data):
         try:

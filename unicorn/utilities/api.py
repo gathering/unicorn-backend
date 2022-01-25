@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError as ModelValidationError
 from django.db.models import ManyToManyField
 from django.http import Http404
+from guardian.shortcuts import get_perms
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import BasePermission
 from rest_framework.relations import PrimaryKeyRelatedField
@@ -156,6 +157,7 @@ class ValidatedModelSerializer(ModelSerializer):
     """
 
     obj_type = SerializerMethodField()
+    permissions = SerializerMethodField()
 
     def validate(self, data):
         attrs = data.copy()
@@ -182,6 +184,9 @@ class ValidatedModelSerializer(ModelSerializer):
 
     def get_obj_type(self, obj) -> str:
         return "full"
+    
+    def get_permissions(self, obj) -> list:
+        return list(get_perms(self.context['request'].user, obj))
 
 
 class WritableNestedSerializer(ModelSerializer):

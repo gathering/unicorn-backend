@@ -24,6 +24,7 @@ class UserSerializer(ValidatedModelSerializer):
         )
         fields = (
             "obj_type",
+            "permissions",
             "uuid",
             "display_name_format",
             "username",

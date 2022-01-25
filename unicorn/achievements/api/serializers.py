@@ -29,6 +29,7 @@ class TeamSerializer(ValidatedModelSerializer):
         model = Team
         read_only_fields = (
             "obj_type",
+            "permissions",
             "url",
             "id",
             "user_count",
@@ -63,7 +64,7 @@ class CategorySerializer(ValidatedModelSerializer):
 
     class Meta:
         model = Category
-        fields = ("obj_type", "url", "id", "name", "levels")
+        fields = ("obj_type", "permissions", "url", "id", "name", "levels")
 
 
 class NestedCategorySerializer(WritableNestedSerializer):
@@ -86,6 +87,7 @@ class LevelSerializer(ValidatedModelSerializer):
         model = Level
         fields = (
             "obj_type",
+            "permissions",
             "url",
             "id",
             "category",
@@ -122,6 +124,7 @@ class AchievementSerializer(ValidatedModelSerializer):
         model = Achievement
         read_only_fields = (
             "obj_type",
+            "permissions",
             "url",
             "id",
             "manual_validation",

@@ -10,7 +10,7 @@ class MatchRequestSerializer(ValidatedModelSerializer):
 
     class Meta:
         model = MatchRequest
-        read_only_fields = ("obj_type", "id", "author")
+        read_only_fields = ("obj_type", "permissions", "id", "author")
         fields = (
             "active",
             "text",
