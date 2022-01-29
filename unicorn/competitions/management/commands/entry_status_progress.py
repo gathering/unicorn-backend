@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         self.stdout.write(
-            "=== Starting at %s" % datetime.now().replace(tzinfo=pytz.utc)
+            "=== Starting entry_status_progress at %s" % datetime.now().replace(tzinfo=pytz.utc)
         )
         for entry in Entry.objects.all().prefetch_related("competition"):
             is_valid = entry.validate_contributors()
@@ -26,7 +26,7 @@ class Command(BaseCommand):
                 and entry.status == ENTRY_STATUS_DRAFT
             ):
                 self.stdout.write(
-                    '+ Entry "%s" in %s was progress from Draft to Qualified'
+                    '+ Entry "%s" in %s was progressed from Draft to Qualified'
                     % (entry.title, entry.competition.name)
                 )
                 entry.status = ENTRY_STATUS_QUALIFIED
@@ -48,5 +48,5 @@ class Command(BaseCommand):
             )
 
         self.stdout.write(
-            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc)
+            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc), ending="\n\n"
         )

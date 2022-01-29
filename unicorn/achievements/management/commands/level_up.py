@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.db.models import Q, Sum
@@ -11,6 +14,10 @@ class Command(BaseCommand):
     help = "Runs through and levels up users with enough points"
 
     def handle(self, *args, **kwargs):
+        self.stdout.write(
+            "=== Starting level_up at %s" % datetime.now().replace(tzinfo=pytz.utc)
+        )
+
         for category in Category.objects.all():
             # skip categories with no levels set
             if len(category.levels) < 1:
@@ -55,3 +62,7 @@ class Command(BaseCommand):
                 # assign levels for all the users
                 for user in users:
                     Level.objects.create(category=category, user=user, level=level)
+        
+        self.stdout.write(
+            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc), ending="\n\n"
+        )

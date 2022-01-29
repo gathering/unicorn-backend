@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from achievements.constants import ACHIEVEMENT_TYPE_CREW, ACHIEVEMENT_TYPE_PARTICIPANT
 from achievements.models import Achievement, Award
 from django.core.management.base import BaseCommand
@@ -9,6 +12,10 @@ class Command(BaseCommand):
     help = "Runs through and awards achievements to users which should get them"
 
     def handle(self, *args, **kwargs):
+        self.stdout.write(
+            "=== Starting award_achievements at %s" % datetime.now().replace(tzinfo=pytz.utc)
+        )
+
         # fetch all achievements with querysets
         achievements = Achievement.objects.exclude(manual_validation=True).exclude(
             qs_award__exact=""
@@ -81,3 +88,7 @@ class Command(BaseCommand):
                         self.stdout.write(
                             "++ Gave '{}' to '{}'".format(a.name, user.display_name)
                         )
+
+        self.stdout.write(
+            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc), ending="\n\n"
+        )
