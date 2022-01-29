@@ -2,7 +2,7 @@ from achievements.constants import ACHIEVEMENT_TYPE_CREW, ACHIEVEMENT_TYPE_PARTI
 from achievements.models import Achievement, Award
 from django.core.management.base import BaseCommand
 from django.db.models import QuerySet
-from users.constants import USER_ROLE_CREW, USER_ROLE_PARTICIPANT
+from accounts.constants import USER_ROLE_CREW, USER_ROLE_PARTICIPANT
 
 
 class Command(BaseCommand):
