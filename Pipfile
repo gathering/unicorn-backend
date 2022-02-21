@@ -10,7 +10,7 @@ unittest2 = "*"
 
 [packages]
 dj-database-url = "*"
-Django = ">=3.2.10,<4.0"
+Django = ">=3.2.12,<4.0"
 djangorestframework = ">=3.11"
 django-cors-headers = ">=3.2.1"
 django-debug-toolbar = ">=2.2"
@@ -33,4 +33,4 @@ drf-spectacular = "*"
 django-redis = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
