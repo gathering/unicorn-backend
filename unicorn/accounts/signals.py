@@ -61,3 +61,8 @@ def assign_crew_permissions_keycloak(instance, **kwargs):
         ac = AutoCrew.objects.filter(crew=g).prefetch_related()
         for mapping in ac:
             instance.user.groups.add(mapping.group)
+
+            # if users are added to the crew-group, also add the role.
+            if mapping.group.name == 'p-crew':
+                instance.user.role = USER_ROLE_CREW
+                instance.user.save()
