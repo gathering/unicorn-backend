@@ -186,7 +186,7 @@ class ValidatedModelSerializer(ModelSerializer):
         return "full"
     
     def get_permissions(self, obj) -> list:
-        return list(get_perms(self.context['request'].user, obj))
+        return [f"{obj._meta.app_label}.{p}" for p in list(get_perms(self.context['request'].user, obj))]
 
 
 class WritableNestedSerializer(ModelSerializer):
