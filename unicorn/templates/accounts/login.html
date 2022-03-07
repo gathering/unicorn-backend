@@ -20,18 +20,18 @@
             {% if not provider %}
                 <div class="mb-8 flex flex-wrap text-gray-800">
                     {% for backend in backends.backends %}
-                        <div class="py-2 {% if backend in 'keycloak,geekevents' %}w-full order-first{% else %}w-1/2{% endif %}">
+                        <div class="py-2 {% if backend in 'keycloak-crew,keycloak-participant' %}w-full order-first{% else %}w-1/2 hidden{% endif %}">
                             <a href="{% url 'social:begin' backend %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="p-3 bg-white rounded-md shadow-sm flex items-center border border-transparent hover:border-gray-300 hover:shadow-lg hover:text-black transition ease-in-out duration-200">
                                 <div class="w-1/3">
-                                    <img class="{% if backend in 'keycloak,geekevents' %}w-12{% else %}w-6{% endif %} object-cover rounded-full mx-auto" src="{% static "img/provider_"%}{{ backend }}.png" alt="" />
+                                    <img class="{% if backend in 'keycloak-crew,keycloak-participant' %}w-12{% else %}w-6{% endif %} object-cover rounded-full mx-auto" src="{% static "img/provider_"%}{{ backend }}.png" alt="" />
                                 </div>
                                 <div class="w-2/3 ml-2 text-sm font-light">
-                                    {% if backend == 'geekevents' %}
+                                    {% if backend == 'keycloak-participant' %}
                                         <p class="text-base font-normal">I'm a Participant<span class="sr-only">,</span></p>
-                                        <p>sign in using {{ backend|capfirst }}</p>
-                                    {% elif backend == 'keycloak' %}
+                                        <p>sign in with The Gathering SSO</p>
+                                    {% elif backend == 'keycloak-crew' %}
                                         <p class="text-base font-normal">I'm Crew<span class="sr-only">,</span></p>
-                                        <p>sign in using {{ backend|capfirst }}</p>
+                                        <p>sign in using Wannabe</p>
                                     {% else %}<p>{{ backend|capfirst }}</p>{% endif %}
                                 </div>
                             </a>

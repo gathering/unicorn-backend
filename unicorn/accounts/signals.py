@@ -53,7 +53,7 @@ def build_discord_avatar_url(instance, **kwargs):
 
 @receiver(post_save, sender=UserSocialAuth)
 def assign_crew_permissions_keycloak(instance, **kwargs):
-    if instance.provider != "keycloak":
+    if instance.provider != "keycloak-crew":
         return
 
     # find groups for each of the crews the user is a member of and add them to them
@@ -66,3 +66,12 @@ def assign_crew_permissions_keycloak(instance, **kwargs):
             if mapping.group.name == 'p-crew':
                 instance.user.role = USER_ROLE_CREW
                 instance.user.save()
+
+@receiver(post_save, sender=UserSocialAuth)
+def assign_participant_permissions_keycloak(instance, **kwargs):
+    if instance.provider != "keycloak-participant":
+        return
+
+    # blindy assign participant role    
+    instance.user.role = USER_ROLE_PARTICIPANT
+    instance.user.save()

@@ -1,5 +1,6 @@
 from django.urls import reverse
 from social_core.backends.base import BaseAuth
+from social_core.backends.keycloak import KeycloakOAuth2
 from utilities.utils import nested_get
 
 from .constants import USER_ROLE_CREW, USER_ROLE_PARTICIPANT
@@ -8,6 +9,14 @@ WB_BASE_URL = "https://wannabe.gathering.org"
 GE_SSO_BASE_URL = "https://www.geekevents.org/sso"
 
 GE_GENDER_MAP = {1: "male", 2: "female"}
+
+
+class KeycloakCrewOAuth2(KeycloakOAuth2):
+    name = "keycloak-crew"
+
+
+class KeycloakParticipantOAuth2(KeycloakOAuth2):
+    name = "keycloak-participant"
 
 
 class WannabeAPIAuth(BaseAuth):

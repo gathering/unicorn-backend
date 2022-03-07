@@ -4,6 +4,8 @@
 
 ## Running with Docker 🐳
 
+Before running, make sure to create and populate local environment variables by `cp .env.development .env` and updating any relevant values
+
 To start UNICORN development in Docker, you have to install Docker on your computer. Then you can run `docker-compose up -d` from the project root.
 
 When running for the first time, or after creating migrations, remember to also run `docker-compose exec web python /unicorn/unicorn/manage.py migrate`
