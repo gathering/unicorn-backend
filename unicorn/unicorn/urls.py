@@ -52,7 +52,7 @@ _patterns = [
     path("oauth/", include("oauth2_provider.urls", namespace="oauth2_provider")),
     path("social/", include("social_django.urls", namespace="social")),
     # Admin
-    path("admin/", admin.site.urls),
+    path("djadmin/", admin.site.urls),
 ]
 
 if settings.DEBUG:
