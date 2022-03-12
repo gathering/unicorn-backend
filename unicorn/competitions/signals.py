@@ -103,6 +103,13 @@ def adjust_entry_permissions_for_contributor(sender, instance, created, **kwargs
         assign_perm("change_entry", instance.user, instance.entry)
         assign_perm("delete_entry", instance.user, instance.entry)
 
+        # remove from all other contributors
+        theothers = Contributor.objects.filter(entry=instance.entry)
+        theothers = theothers.exclude(pk=instance.pk)
+        for contrib in theothers:
+            remove_perm("change_entry", contrib.user, instance.entry)
+            remove_perm("delete_entry", contrib.user, instance.entry)
+
     # remove permissions for anyone else which might have these permissions
     else:
         remove_perm("change_entry", instance.user, instance.entry)
