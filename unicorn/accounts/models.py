@@ -12,7 +12,7 @@ from guardian.mixins import GuardianUserMixin
 
 from .constants import (
     USER_DISPLAY_CHOICES,
-    USER_DISPLAY_FIRST_AKA,
+    USER_DISPLAY_FIRST_LAST,
     USER_GENDERS,
     USER_ROLE_CHOICES,
     USER_ROLE_MORTAL,
@@ -39,7 +39,7 @@ class User(AbstractUser, GuardianUserMixin):
         verbose_name=_("Display Name format"),
         max_length=3,
         choices=USER_DISPLAY_CHOICES,
-        default=USER_DISPLAY_FIRST_AKA,
+        default=USER_DISPLAY_FIRST_LAST,
     )
     phone_number = models.CharField(
         verbose_name=_("Phone Number"),
