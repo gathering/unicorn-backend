@@ -1,6 +1,7 @@
 import base64
 import logging
 import os
+import shutil
 import uuid
 
 from competitions.models import Entry, File
@@ -305,7 +306,7 @@ class TusUpload(APIView):
             # logger.error("post_finish_check")
 
             filename = uuid.uuid4().hex + "_" + filename
-            os.rename(
+            shutil.move(
                 upload_file_path, os.path.join(self.TUS_DESTINATION_DIR, filename)
             )
             cache.delete_many(
