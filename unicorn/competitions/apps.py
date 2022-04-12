@@ -15,5 +15,6 @@ class CompetitionsConfig(AppConfig):
     def ready(self):
         from django.db.models.signals import post_migrate
         import competitions.signals  # noqa: F401
+        import competitions.signals_achievements  # noqa: F401
 
         post_migrate.connect(create_permission_groups, sender=self)

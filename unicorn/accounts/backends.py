@@ -13,10 +13,14 @@ GE_GENDER_MAP = {1: "male", 2: "female"}
 
 class KeycloakCrewOAuth2(KeycloakOAuth2):
     name = "keycloak-crew"
+    
+    EXTRA_DATA = [("sub", "sub")]
 
 
 class KeycloakParticipantOAuth2(KeycloakOAuth2):
     name = "keycloak-participant"
+
+    EXTRA_DATA = [("sub", "sub")]
 
 
 class WannabeAPIAuth(BaseAuth):
