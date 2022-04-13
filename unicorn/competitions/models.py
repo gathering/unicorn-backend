@@ -160,6 +160,16 @@ class Competition(CreatedUpdatedModel, models.Model):
     vote_time_end = models.DateTimeField(
         verbose_name=_("Voting End"), null=True, blank=True, default=None
     )
+    show_prestart_lock = models.DateTimeField(
+        verbose_name=_("Pre-show lockdown start"),
+        null=True,
+        blank=True,
+        default=None,
+        help_text=_(
+            "If set, a pre-show lockdown will block all edits to the competition "
+            "and related entries from the specified time to 'Showtime End'"
+        ),
+    )
     show_time_start = models.DateTimeField(
         verbose_name=_("Showtime Start"), null=True, blank=True, default=None
     )
@@ -199,6 +209,14 @@ class Competition(CreatedUpdatedModel, models.Model):
     @property
     def entries_count(self) -> int:
         return self.entries.filter().count()
+
+    @property
+    def is_locked(self, time=None) -> bool:
+        if not self.show_prestart_lock:
+            return False
+
+        now = time or datetime.utcnow().replace(tzinfo=pytz.utc)
+        return self.show_prestart_lock < now < self.show_time_end
 
     def compute_state(self, time=None):
         now = time or datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -368,6 +386,28 @@ class Competition(CreatedUpdatedModel, models.Model):
         ):
             errors.update(
                 {"show_time_end": _("Show end time must be after show start time")}
+            )
+
+        if self.show_prestart_lock and not (self.show_time_start or self.show_time_end):
+            errors.update(
+                {
+                    "show_prestart_lock": _(
+                        "Pre-show lockdown start can only be set if Showtime start and end is also set."
+                    )
+                }
+            )
+
+        if (
+            self.show_prestart_lock
+            and self.run_time_end
+            and self.show_prestart_lock < self.run_time_end
+        ):
+            errors.update(
+                {
+                    "show_prestart_lock": _(
+                        "Pre-show lockdown start cannot be before competition run time has ended."
+                    )
+                }
             )
 
         # Also make sure we don't open competition backwards in time
