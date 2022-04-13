@@ -34,7 +34,7 @@ _patterns = [
     ),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     # Serving static media in Django to pipe it through LoginRequiredMiddleware
-    path("media/<path>", serve, {"document_root": settings.MEDIA_ROOT}),
+    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     # TUS Uploads
     path("upload/", TusUpload.as_view(), name="tus_upload"),
     re_path(

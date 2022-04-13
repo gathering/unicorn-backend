@@ -122,6 +122,8 @@ class CompetitionSerializer(ValidatedModelSerializer):
             "rsvp",
             "header_image",
             "header_credit",
+            "sponsor_name",
+            "sponsor_logo",
             "team_min",
             "team_max",
             "contributor_extra",

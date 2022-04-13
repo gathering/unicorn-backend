@@ -121,6 +121,11 @@ class Competition(CreatedUpdatedModel, models.Model):
         help_text=_("Required when an image is set."),
     )
 
+    sponsor_name = models.CharField(max_length=64, null=True, blank=True, default=None)
+    sponsor_logo = models.ImageField(
+        upload_to="sponsor", null=True, blank=True, default=None
+    )
+
     team_min = models.PositiveSmallIntegerField(
         verbose_name=_("Minimum Team Size"),
         null=True,

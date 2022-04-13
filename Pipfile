@@ -32,6 +32,7 @@ django-environ = "*"
 django-tailwind = "*"
 drf-spectacular = "*"
 django-redis = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.10"
