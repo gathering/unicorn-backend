@@ -62,7 +62,8 @@ class Command(BaseCommand):
                 # assign levels for all the users
                 for user in users:
                     Level.objects.create(category=category, user=user, level=level)
-        
+
         self.stdout.write(
-            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc), ending="\n\n"
+            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc),
+            ending="\n\n",
         )

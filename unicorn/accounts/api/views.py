@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
-from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
 from utilities.api import FieldChoicesViewSet, ModelViewSet
 from utilities.permissions import IsAuthenticatedAndNotAnon, StandardObjectPermissions
@@ -53,8 +53,6 @@ class SearchView(ListAPIView):
 
 
 class MyGlobalPermissionsView(APIView):
-    
-
     def get(self, request):
         """
         Return a list of all global permissions for the current user

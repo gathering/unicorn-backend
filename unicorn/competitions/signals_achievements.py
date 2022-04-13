@@ -1,12 +1,11 @@
 import requests
-from django.db.models.signals import post_save
-from django.conf import settings
-from django.dispatch import receiver
-
 from accounts.constants import USER_ROLE_CREW, USER_ROLE_PARTICIPANT
 from accounts.models import User
 from competitions.constants import ENTRY_STATUS_QUALIFIED
-from competitions.models import Competition, Contributor, Entry, File, Vote
+from competitions.models import Entry, Vote
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 def get_social_user(user: User):

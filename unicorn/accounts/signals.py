@@ -63,15 +63,16 @@ def assign_crew_permissions_keycloak(instance, **kwargs):
             instance.user.groups.add(mapping.group)
 
             # if users are added to the crew-group, also add the role.
-            if mapping.group.name == 'p-crew':
+            if mapping.group.name == "p-crew":
                 instance.user.role = USER_ROLE_CREW
                 instance.user.save()
+
 
 @receiver(post_save, sender=UserSocialAuth)
 def assign_participant_permissions_keycloak(instance, **kwargs):
     if instance.provider != "keycloak-participant":
         return
 
-    # blindy assign participant role    
+    # blindy assign participant role
     instance.user.role = USER_ROLE_PARTICIPANT
     instance.user.save()
