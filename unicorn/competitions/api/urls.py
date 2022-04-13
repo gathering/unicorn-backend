@@ -22,6 +22,7 @@ router.register(r"genres", views.GenreViewSet)
 # Competitions
 router.register(r"competitions", views.CompetitionViewSet)
 router.register(r"results", views.ResultsViewSet, basename="result")
+router.register(r"download-entries", views.DownloadViewSet, basename="download")
 
 # Entries
 router.register(r"entries", views.EntryViewSet, basename="entry")

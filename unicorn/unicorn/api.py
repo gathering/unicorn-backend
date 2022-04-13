@@ -1,8 +1,9 @@
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from rest_framework import serializers
+from rest_framework.exceptions import APIException
 from rest_framework.metadata import SimpleMetadata
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.renderers import BrowsableAPIRenderer
+from rest_framework.renderers import BaseRenderer, BrowsableAPIRenderer
 from rest_framework.utils.field_mapping import ClassLookupDict
 
 #
@@ -20,6 +21,18 @@ class FormlessBrowsableAPIRenderer(BrowsableAPIRenderer):
 
     def get_filter_form(self, data, view, request):
         return None
+
+
+class PassthroughRenderer(BaseRenderer):
+    """
+    Return data as-is. View should supply a Response.
+    """
+
+    media_type = ""
+    format = ""
+
+    def render(self, data, accepted_media_type=None, renderer_context=None):
+        return data
 
 
 #
@@ -121,3 +134,20 @@ class ExtendedMetadata(SimpleMetadata):
             serializers.JSONField: "json",
         }
     )
+
+
+#
+# Exceptions
+#
+
+
+class ServerError(APIException):
+    status_code = 503
+    default_detail = "Service temporarily unavailable, try again later."
+    default_code = "service_unavailable"
+
+
+class MethodNotAllowed(APIException):
+    status_code = 405
+    default_detail = "This method is not allowed on this endpoint."
+    default_code = "method_not_allowed"

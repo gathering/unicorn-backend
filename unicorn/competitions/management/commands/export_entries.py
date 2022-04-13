@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # check base path and create if it isn't there
-        base_path = "/data/export"
+        base_path = "/export"
         if not os.path.exists(base_path):
             self.stdout.write("+ Base directory does not exist, creating..")
             try:
