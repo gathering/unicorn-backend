@@ -7,6 +7,7 @@ verify_ssl = true
 flake8 = "*"
 codecov = "*"
 unittest2 = "*"
+black = "*"
 
 [packages]
 dj-database-url = "*"
@@ -34,3 +35,6 @@ django-redis = "*"
 
 [requires]
 python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true
