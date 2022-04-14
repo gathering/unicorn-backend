@@ -66,3 +66,46 @@ def annotate_steam(backend, details, *args, **kwargs):
     }
 
     return {"details": dict(extra, **details)}
+
+
+def fetch_wannabe_profile(backend, details, response, *args, **kwargs):
+    # ignore for all other backends than crew
+    if backend.name != "keycloak-crew":
+        return
+
+    # start by authenticating to wannabe with our service credentials
+    try:
+        auth = requests.post(
+            f"{WB_BASE_URL}/api/auth/services/login",
+            headers={"Accept": "application/json"},
+            json={
+                "client_id": backend.setting("KEYCLOAK_CREW_KEY"),
+                "client_secret": backend.setting("KEYCLOAK_CREW_SECRET"),
+                "scope": "external-wannabe-service-user profile",
+            },
+        )
+    except requests.ConnectionError:
+        return
+
+    # extract access token and use it to fetch the users profile
+    access_token = auth.json()["access_token"]
+    try:
+        profile = requests.get(
+            f"{WB_BASE_URL}/api/profile/profile/{response.get('sub')}",
+            headers={
+                "Accept": "application/json",
+                "Cookie": f"wannabe_jwt={access_token}",
+            },
+        )
+    except requests.ConnectionError:
+        return
+
+    # extract profile fields and save those we want to keep
+    data = profile.json()
+    extra = {
+        "username": data.get("nickname"),
+        "phone_number": data.get("phone"),
+    }
+    details.pop("username")
+
+    return {"details": dict(**extra, **details)}
