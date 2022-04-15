@@ -149,6 +149,7 @@ INSTALLED_APPS = [
     "social_django",
     "tailwind",
     "theme",
+    "core",
 ]
 
 if SENTRY_DSN is not False:

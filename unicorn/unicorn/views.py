@@ -20,6 +20,7 @@ class APIRootView(APIView):
             "competitions": reverse(
                 "competitions-api:api-root", request=request, format=format
             ),
+            "core": reverse("core-api:api-root", request=request, format=format),
             "matchmaking": reverse(
                 "matchmaking-api:api-root", request=request, format=format
             ),

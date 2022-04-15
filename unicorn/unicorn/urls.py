@@ -24,6 +24,7 @@ _patterns = [
     path("api/accounts/", include("accounts.api.urls")),
     path("api/achievements/", include("achievements.api.urls")),
     path("api/competitions/", include("competitions.api.urls")),
+    path("api/core/", include("core.api.urls")),
     path("api/matchmaking/", include("matchmaking.api.urls")),
     # API Docs
     path("api/openapi.yaml", SpectacularAPIView.as_view(), name="schema"),
