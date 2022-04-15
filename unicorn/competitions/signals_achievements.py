@@ -36,20 +36,23 @@ def user_has_voted(instance: Vote, created, **kwargs):
     if not created:
         return
 
-    # find correct social user
-    social, social_type = get_social_user(instance.user)
+    try:
+        # find correct social user
+        social, social_type = get_social_user(instance.user)
 
-    # build payload
-    payload = {
-        "type": "user_has_voted",
-        "user": social.extra_data["sub"],
-        "user_type": social_type,
-        "entry": instance.entry.id,
-        "competition": instance.entry.competition.id,
-    }
+        # build payload
+        payload = {
+            "type": "user_has_voted",
+            "user": social.extra_data["sub"],
+            "user_type": social_type,
+            "entry": instance.entry.id,
+            "competition": instance.entry.competition.id,
+        }
 
-    # send event to achievements
-    requests.post(settings.ACHIEVEMENTS_WEBHOOK, json=payload)
+        # send event to achievements
+        requests.post(settings.ACHIEVEMENTS_WEBHOOK, json=payload)
+    except KeyError:
+        return
 
 
 @receiver(post_save, sender=Entry)
