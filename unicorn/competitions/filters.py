@@ -75,6 +75,7 @@ class EntryFilter(django_filters.FilterSet):
         queryset=Competition.objects.all(), label="Competition ID"
     )
     name = django_filters.CharFilter()
+    status = django_filters.NumberFilter()
 
     class Meta:
         model = Entry
