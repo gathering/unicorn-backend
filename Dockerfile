@@ -12,4 +12,4 @@ RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . .
 
-CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 3 --chdir unicorn/ --access-logfile '-' --error-logfile '-'
+CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 6 --chdir unicorn/ --access-logfile '-' --error-logfile '-'
