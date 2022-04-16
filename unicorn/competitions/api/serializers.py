@@ -216,6 +216,7 @@ class EntrySerializer(ValidatedModelSerializer):
             "status",
             "crew_msg",
             "screen_msg",
+            "vote_msg",
             "comment",
             "contributors",
             "files",

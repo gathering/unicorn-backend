@@ -590,6 +590,13 @@ class Entry(CreatedUpdatedModel, models.Model):
         null=True,
         default=None,
     )
+    vote_msg = models.CharField(
+        verbose_name=_("Message for voting"),
+        max_length=140,
+        blank=True,
+        null=True,
+        default=None,
+    )
 
     comment = models.TextField(
         verbose_name=_("Comment"), blank=True, null=True, default=None
