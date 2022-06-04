@@ -151,8 +151,8 @@ class UserCardManager(models.Manager):
         return card
 
     def fetch_from_wannabe(self, card):
-        app = "5505db18-864c-44ba-bc7d-6a73c39fe93c"
-        key = "4918abafefd9c421ea2a5fe64d4d7105"
+        app = ""
+        key = ""
 
         payload = {"app": app, "apikey": key, "card_number": str(card)}
 

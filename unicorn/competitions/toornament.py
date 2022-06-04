@@ -7,11 +7,9 @@ class ToornamentBase(object):
     Toornament API Base class
     """
 
-    api_key = "23tDgZuK8SJefQSPvHrckkGWn0TsOD1ZiH5GCgGabrI"
-    client_id = (
-        "589749b1150ba02e3d8b456753b3cismgsg0wo0scckc0kkww4844k88w0sc0gosc0sw0w0oko"
-    )
-    client_secret = "3exfy4j36a80wokc08c80w4kc8kscksw0gg0owo8ws8go84o4g"
+    api_key = ""
+    client_id = ""
+    client_secret = ""
 
     base_url = "https://api.toornament.com/organizer/v2/"
 
