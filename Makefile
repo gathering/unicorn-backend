@@ -24,9 +24,6 @@ test-coverage: ## Run Django testsuite with `manage.py test` command - with cove
 show-coverage: ## Create coverage report and open it in browser
 	${COVERAGE} html && python -mwebbrowser file://$$PWD/htmlcov/index.html
 
-ci-codecov-upload: ## Uploads coverage report to Codecov.io
-	${BIN} codecov
-
 makemigrations: ## Run Django makemigrations to create migration
 	${PYTHON} unicorn/manage.py makemigrations
 
