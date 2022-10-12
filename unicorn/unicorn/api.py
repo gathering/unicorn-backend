@@ -111,7 +111,6 @@ class ExtendedMetadata(SimpleMetadata):
         {
             serializers.Field: "field",
             serializers.BooleanField: "boolean",
-            serializers.NullBooleanField: "boolean",
             serializers.CharField: "string",
             serializers.UUIDField: "string",
             serializers.URLField: "url",
