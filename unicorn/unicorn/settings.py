@@ -336,9 +336,8 @@ REST_FRAMEWORK = {
     # "ALLOWED_VERSIONS": [REST_FRAMEWORK_VERSION],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
-        # "zoodo_utils.auth.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "zoodo_utils.auth.authentication.AuthenticateAnonymous",
+        "utilities.authentication.AuthenticateAnonymous",
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "utilities.permissions.DjangoObjectPermissionsFilter",
