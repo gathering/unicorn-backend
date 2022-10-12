@@ -3,12 +3,12 @@ from django.apps import AppConfig
 
 def create_default_groups(sender, **kwargs):
     from django.contrib.auth.models import Group, Permission
+
     from .models import User
 
     # group for anonymous permissions
     anon = Group.objects.get_or_create(name="p-anonymous")
     anon[0].permissions.add(
-        Permission.objects.get(codename="view_category"),
         Permission.objects.get(codename="view_genre"),
     )
     anonuser = User.get_anonymous()
@@ -32,7 +32,7 @@ class AccountsConfig(AppConfig):
     name = "accounts"
 
     def ready(self):
-        from django.db.models.signals import post_migrate
         import accounts.signals  # noqa: F401
+        from django.db.models.signals import post_migrate
 
         post_migrate.connect(create_default_groups, sender=self)

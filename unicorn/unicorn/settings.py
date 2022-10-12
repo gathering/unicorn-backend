@@ -136,7 +136,6 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "storages",
     "guardian",
-    "achievements.apps.AchievementsConfig",
     "competitions",
     "extras",
     "matchmaking",

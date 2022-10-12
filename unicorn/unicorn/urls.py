@@ -22,7 +22,6 @@ _patterns = [
     # API
     path("api/", APIRootView.as_view(), name="api-root"),
     path("api/accounts/", include("accounts.api.urls")),
-    path("api/achievements/", include("achievements.api.urls")),
     path("api/competitions/", include("competitions.api.urls")),
     path("api/core/", include("core.api.urls")),
     path("api/matchmaking/", include("matchmaking.api.urls")),

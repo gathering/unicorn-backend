@@ -9,7 +9,3 @@ scriptdir="${scriptdir%/*}"
 # Competition jobs
 python $scriptdir/../unicorn/manage.py update_competition_states
 python $scriptdir/../unicorn/manage.py entry_status_progress
-
-# Achievement jobs
-python $scriptdir/../unicorn/manage.py award_achievements
-python $scriptdir/../unicorn/manage.py level_up

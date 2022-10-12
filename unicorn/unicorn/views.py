@@ -14,9 +14,6 @@ class APIRootView(APIView):
 
         # List all applications available for everyone, including anonymous users
         data = {
-            "achievements": reverse(
-                "achievements-api:api-root", request=request, format=format
-            ),
             "competitions": reverse(
                 "competitions-api:api-root", request=request, format=format
             ),
