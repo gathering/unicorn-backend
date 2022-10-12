@@ -403,11 +403,3 @@ class CompetitionModelTestCase(TestCase):
             self.competition1.next_state,
             self.competition1.compute_next_state(state=self.competition1.state),
         )
-
-    def test_toornament_push_without_id(self):
-        """
-        Make sure we stop any attemts to push data to the Toornament
-        API unless we have set the Tournament ID on the Competition.
-        """
-        with self.assertRaises(ValueError):
-            self.competition1.push_to_toornament()

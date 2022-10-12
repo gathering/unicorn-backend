@@ -115,7 +115,6 @@ class CompetitionSerializer(ValidatedModelSerializer):
             "fileupload",
             "links",
             "participant_limit",
-            "toornament",
             "published",
             "visibility",
             "report_win_loss",

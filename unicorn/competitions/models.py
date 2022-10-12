@@ -12,7 +12,6 @@ from utilities.models import CreatedUpdatedModel
 from utilities.utils import round_seconds
 
 from .constants import *  # noqa: F403
-from .toornament import Match, Tournament
 
 
 class Genre(models.Model):
@@ -75,13 +74,6 @@ class Competition(CreatedUpdatedModel, models.Model):
     )
     participant_limit = models.PositiveSmallIntegerField(
         verbose_name=_("Participant Limit"), null=True, default=0
-    )
-    toornament = models.CharField(
-        verbose_name=_("Toornament ID"),
-        max_length=128,
-        null=True,
-        blank=True,
-        default=None,
     )
 
     published = models.BooleanField(
@@ -511,28 +503,6 @@ class Competition(CreatedUpdatedModel, models.Model):
         # run parent logic
         super(Competition, self).save(*args, **kwargs)
 
-    def push_to_toornament(self):
-        """
-        Push all entries with their contributors to the Toornament
-        API to register them as participants.
-        :return:
-        """
-        # this only works if we have a Toornament ID
-        if not self.toornament:
-            raise ValueError("Competition is not linked to Toornament")
-
-        # fetch tournament from API
-        t = Tournament()
-        t.retrieve(self.toornament)
-        if not t.obj:
-            raise Exception("Unable to fetch competition from Toornament, check ID")
-
-        # loop through all our entries and push to the API
-        for e in self.entries.filter(status=ENTRY_STATUS_QUALIFIED):
-            status = t.add_participant(e.build_toornament_participant())
-            e.toornament = status
-            e.save()
-
 
 class Entry(CreatedUpdatedModel, models.Model):
     competition = models.ForeignKey(
@@ -555,13 +525,6 @@ class Entry(CreatedUpdatedModel, models.Model):
     )
     status_comment = models.TextField(
         verbose_name=_("Status Comment"), blank=True, null=True, default=None
-    )
-    toornament = models.CharField(
-        verbose_name=_("Toornament ID"),
-        max_length=128,
-        blank=True,
-        null=True,
-        default=None,
     )
     extra_info = models.CharField(
         verbose_name=_("Extra Info"),
@@ -698,77 +661,6 @@ class Entry(CreatedUpdatedModel, models.Model):
 
         if errors:
             raise ValidationError(errors)
-
-    def build_toornament_participant(self):
-        """
-        Build Toornament data for pushing as participant to a Tournament
-        :return: dict
-        """
-
-        # start with teams
-        if self.competition.team_required and self.contributor_count > 1:
-            # build initial dict with title and owner data
-            owner = Contributor.objects.get(entry=self, is_owner=True)
-            data = {"name": self.title, "email": owner.user.email, "lineup": []}
-
-            # add lineup with details about all contributors
-            for contributor in Contributor.objects.filter(entry=self):
-                data["lineup"].append(
-                    {
-                        "name": contributor.user.display_name[:40],
-                        "custom_user_identifier": contributor.extra_info,
-                        "email": contributor.user.email,
-                    }
-                )
-
-            # add the toornament ID if it exists. this should make sure we don't
-            # get any duplicate participants if we were to push data multiple times
-            if self.toornament:
-                data = {**data, "id": self.toornament}
-
-            return data
-
-        # then handle single players
-        elif not self.competition.team_required and self.contributor_count == 1:
-            contributor = Contributor.objects.get(entry=self)
-            data = {
-                "name": contributor.user.display_name[:40],
-                "custom_user_identifier": contributor.extra_info,
-                "email": contributor.user.email,
-            }
-
-            # add the toornament ID if it exists. this should make sure we don't
-            # get any duplicate participants if we were to push data multiple times
-            if self.toornament:
-                data = {**data, "id": self.toornament}
-
-            return data
-
-        # this shouldn't happen if everyone creates things as they should
-        else:
-            raise ValueError(
-                "Tried to build participant on bad parameters. {} and {}".format(
-                    str(self.competition.team_required), str(self.contributor_count)
-                )
-            )
-
-    def toornament_info(self):
-        """
-        Push all entries with their contributors to the Toornament
-        API to register them as participants.
-        :return:
-        """
-        # this only works if we have a Toornament ID
-        if not self.competition.toornament:
-            raise NotImplementedError(
-                "Toornament-integration is not enabled on this Competition."
-            )
-        if not self.toornament:
-            raise RuntimeError("This entry has not been published to Toornament yet.")
-
-        # search matches from API
-        t = Match()
-        return t.find_by_participant(self.competition.toornament, self.toornament)
 
 
 class Contributor(models.Model):

@@ -81,13 +81,6 @@ class CompetitionViewSet(ModelViewSet):
 
         return super(CompetitionViewSet, self).destroy(request, *args, **kwargs)
 
-    @action(detail=True, methods=["post"])
-    def push_to_toornament(self, request, pk=None):
-        competition = self.get_object()
-        competition.push_to_toornament()
-
-        return Response({"status": "finished, check toornament to verify"})
-
 
 class DownloadViewSet(ReadOnlyModelViewSet):
     queryset = Competition.objects.prefetch_related("entries")
@@ -161,18 +154,6 @@ class DownloadViewSet(ReadOnlyModelViewSet):
 
 class EntryViewSet(ModelViewSet):
     filterset_class = filters.EntryFilter
-
-    @action(detail=True, methods=["get"])
-    def toornament_info(self, request, pk=None):
-        entry = self.get_object()
-        try:
-            info = entry.toornament_info()
-        except NotImplementedError as e:
-            return Response({"error": str(e)}, status=400)
-        except RuntimeError as e:
-            return Response({"info": str(e)}, status=204)
-
-        return Response(info)
 
     def get_queryset(self):
         if self.request:
