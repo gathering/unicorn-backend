@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 from rest_framework import routers
 
 from . import views
@@ -22,7 +22,9 @@ router.register(r"requests", views.MatchRequestViewSet)
 
 app_name = "matchmaking-api"
 urlpatterns = [
-    url(r"^recommended/$", views.RecommendedListView.as_view(), name="recommended-list")
+    re_path(
+        r"^recommended/$", views.RecommendedListView.as_view(), name="recommended-list"
+    )
     # Competitions
     # url(r'^$', views.CompetitionCLView.as_view(), name='competition-list'),
     # url(r'^(?P<pk>\d+)/$', views.CompetitionRUDView.as_view(), name='competition-detail'),

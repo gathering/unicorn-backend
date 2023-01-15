@@ -2,8 +2,7 @@ import itertools
 
 import django_filters
 from django import forms
-from django.utils.encoding import force_text
-
+from django.utils.encoding import force_str
 
 #
 # Filters
@@ -63,7 +62,7 @@ class NullableModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     def clean(self, value):
         # Strip all instances of the null value before cleaning
         if value is not None:
-            stripped_value = [x for x in value if x != force_text(self.null_value)]
+            stripped_value = [x for x in value if x != force_str(self.null_value)]
         else:
             stripped_value = value
         super(NullableModelMultipleChoiceField, self).clean(stripped_value)

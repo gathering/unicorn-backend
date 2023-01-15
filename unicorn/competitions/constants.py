@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 COMPETITION_STATE_NEW = 1
 COMPETITION_STATE_REG_OPEN = 2
@@ -27,7 +27,7 @@ COMPETITION_VISIBILITY_HIDDEN = "hidden"
 COMEPTITION_VISIBILITY_CHOICES = (
     (COMPETITION_VISIBILITY_PUBLIC, _("Public")),
     (COMPETITION_VISIBILITY_CREW, _("Crew")),
-    (COMPETITION_VISIBILITY_HIDDEN, _("Hidden"))
+    (COMPETITION_VISIBILITY_HIDDEN, _("Hidden")),
 )
 
 GENRE_CATEGORY_OTHER = "other"

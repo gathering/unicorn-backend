@@ -33,8 +33,14 @@ else:
     environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Import required configuration parameters
-ALLOWED_HOSTS = DATABASE = SECRET_KEY = SENTRY_DSN = None
-for setting in ["ALLOWED_HOSTS", "DATABASE", "SECRET_KEY", "SENTRY_DSN"]:
+ALLOWED_HOSTS = CSRF_TRUSTED_ORIGINS = DATABASE = SECRET_KEY = SENTRY_DSN = None
+for setting in [
+    "ALLOWED_HOSTS",
+    "CSRF_TRUSTED_ORIGINS",
+    "DATABASE",
+    "SECRET_KEY",
+    "SENTRY_DSN",
+]:
     try:
         globals()[setting] = getattr(configuration, setting)
     except AttributeError:
@@ -75,7 +81,6 @@ AWS_SECRET_ACCESS_KEY = getattr(configuration, "AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = getattr(configuration, "AWS_STORAGE_BUCKET_NAME", "")
 AWS_S3_OBJECT_PARAMETERS = getattr(configuration, "AWS_S3_OBJECT_PARAMETERS", {})
 
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 LOGIN_REQUIRED = False
 
 CORS_ALLOW_HEADERS = default_headers + (

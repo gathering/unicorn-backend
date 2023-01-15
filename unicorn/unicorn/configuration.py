@@ -13,6 +13,9 @@ import dj_database_url
 #
 # Example: ALLOWED_HOSTS = ['unicorn.example.com', 'unicorn.internal.local']
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://*,https://*").split(
+    ","
+)
 
 # PostgreSQL database configuration.
 if os.getenv("DATABASE_URL"):
@@ -86,16 +89,16 @@ EMAIL = {
 # Enable custom logging. Please see the Django documentation for detailed guidance on configuring custom logs:
 #   https://docs.djangoproject.com/en/1.11/topics/logging/
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
     },
 }
 
@@ -104,10 +107,8 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": os.getenv("REDIS_CONNECTION"),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": "unicorn"
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "KEY_PREFIX": "unicorn",
     }
 }
 
