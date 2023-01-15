@@ -192,6 +192,13 @@ class Competition(CreatedUpdatedModel, models.Model):
     state = models.PositiveSmallIntegerField(
         choices=COMPETITION_STATE_CHOICES, default=COMPETITION_STATE_CLOSED
     )
+    scoring_complete = models.BooleanField(
+        verbose_name=_("Scoring Completed"),
+        default=False,
+        help_text=_(
+            "Scoring is completed and the competition is ready for handing out prices"
+        ),
+    )
 
     class Meta:
         ordering = ("genre__name", "name")

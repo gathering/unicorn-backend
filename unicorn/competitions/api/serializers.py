@@ -146,6 +146,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
             "next_state",
             "featured",
             "autoqualify",
+            "scoring_complete",
         ]
 
     def create(self, validated_data):
