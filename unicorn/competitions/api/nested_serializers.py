@@ -51,7 +51,7 @@ class NestedEntrySerializer(WritableNestedSerializer):
         model = Entry
         fields = ["obj_type", "id", "url", "title", "is_contributor"]
 
-    def get_is_contributor(self, obj):
+    def get_is_contributor(self, obj) -> bool:
         if not self.context["request"].user.is_authenticated:
             return False
 
