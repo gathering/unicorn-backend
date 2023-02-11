@@ -2,11 +2,13 @@ version: '3.7'
 
 services:
   db:
-    image: postgres:10.1-alpine
+    image: postgres:14-alpine
     ports:
       - "0.0.0.0:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=postgres
 
   cache:
     image: redis:alpine
