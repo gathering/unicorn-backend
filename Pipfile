@@ -18,7 +18,7 @@ django-filter = ">=22.1,<23.0"
 django-guardian = ">=2.4,<2.5"
 djangorestframework-guardian = "==0.3.0"
 django-multiselectfield = "==0.1.12"
-django-oauth-toolkit = "<2.0.0"
+django-oauth-toolkit = ">=2.2.0,<2.3.0"
 django-storages = ">=1.13.1,<1.14"
 drf-writable-nested = "==0.7.0"
 gunicorn = ">=20.1,<21.0"
@@ -36,5 +36,3 @@ pillow = ">=9.2,<10.0"
 [requires]
 python_version = "3.10"
 
-[pipenv]
-allow_prereleases = true
