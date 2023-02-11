@@ -17,19 +17,6 @@ def give_user_self_permissions(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=User)
-def assign_crew_permission_groups(sender, instance, created, **kwargs):
-    if created and instance.role is USER_ROLE_CREW and instance.crew is not None:
-        # add group for common crew permissions
-        instance.groups.add(Group.objects.get(name="p-crew"))
-
-        # find groups for each of the crews the user is a member of and add them to them
-        for c in instance.crew:
-            ac = AutoCrew.objects.filter(crew=c).prefetch_related()
-            for mapping in ac:
-                instance.groups.add(mapping.group)
-
-
-@receiver(post_save, sender=User)
 def add_default_permissions(sender, instance, created, **kwargs):
     if (
         instance.role in [USER_ROLE_CREW, USER_ROLE_PARTICIPANT]
