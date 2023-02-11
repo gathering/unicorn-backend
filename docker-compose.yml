@@ -18,7 +18,8 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.development
+      dockerfile: Dockerfile
+    command: python unicorn/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/unicorn
     ports:
