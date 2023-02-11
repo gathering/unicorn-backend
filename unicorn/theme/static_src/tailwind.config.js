@@ -8,15 +8,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 
 module.exports = {
-    /**
-     * Stylesheet generation mode.
-     *
-     * Set mode to "jit" if you want to generate your styles on-demand as you author your templates;
-     * Set mode to "aot" if you want to generate the stylesheet in advance and purge later (aka legacy mode).
-     */
-    mode: "aot",
-
-    purge: [
+    content: [
         /**
          * HTML. Paths to Django template files that will contain Tailwind CSS classes.
          */
@@ -51,7 +43,6 @@ module.exports = {
          */
         // '../../**/*.py'
     ],
-    darkMode: false, // or 'media' or 'class'
     theme: {
         screens: {
             mobile: { max: '768px' },
@@ -65,11 +56,6 @@ module.exports = {
                 'logo-secondary': '#2ac4f4',
               },
         },
-    },
-    variants: {
-        textColor: ['responsive', 'hover', 'focus', 'group-hover'],
-        backgroundColor: ['responsive', 'hover', 'focus'],
-        extend: {},
     },
     plugins: [
         /**

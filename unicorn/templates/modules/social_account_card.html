@@ -1,6 +1,6 @@
 <div class="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden m-4 w-full">
     <div class="laptop:flex laptop:items-center px-6 py-4">
-        {% if account.extra_data.avatar %}<img class="block mx-auto laptop:mx-0 laptop:flex-shrink-0 h-16 w-16 laptop:h-24 laptop:w-24 object-cover rounded-full" src="{{ account.extra_data.avatar }}" alt="">{% endif %}
+        {% if account.extra_data.avatar %}<img class="block mx-auto laptop:mx-0 laptop:shrink-0 h-16 w-16 laptop:h-24 laptop:w-24 object-cover rounded-full" src="{{ account.extra_data.avatar }}" alt="">{% endif %}
         <div class="mt-4 laptop:mt-0 laptop:ml-4 text-center laptop:text-left">
             <p class="text-xl leading-tight">
                 {% if account.extra_data.nick %}<span class="font-light">{{ account.extra_data.nick }}{% if account.extra_data.nick_id %}#{{ account.extra_data.nick_id }}{% endif %} at</span> {% endif %}
@@ -12,7 +12,7 @@
                     {% csrf_token %}
                     <button type="submit" value="disconnect" class="text-red-500 hover:text-white hover:bg-red-500 border border-red-500 text-xs font-semibold rounded px-4 py-1 leading-normal">Disconnect</button>
                 </form>
-                <button href="" class="opacity-50 cursor-not-allowed text-blue-500 border border-blue-500 text-xs font-semibold rounded px-4 py-1 leading-normal">Show my info</button>
+                <button href="" class="cursor-not-allowed text-blue-500 border border-blue-500 text-xs font-semibold rounded px-4 py-1 leading-normal">Show my info</button>
             </div>
         </div>
     </div>
