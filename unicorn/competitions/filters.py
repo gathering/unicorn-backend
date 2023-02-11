@@ -30,9 +30,7 @@ class CompetitionFilter(django_filters.FilterSet):
         null_value=None,
         label=_("Category"),
     )
-    genre = django_filters.ModelMultipleChoiceFilter(
-        field_name="genre", queryset=Genre.objects.all(), label=_("Genre")
-    )
+    genre = django_filters.ModelMultipleChoiceFilter(field_name="genre", queryset=Genre.objects.all(), label=_("Genre"))
     name = django_filters.CharFilter()
     info = django_filters.CharFilter()
     rules = django_filters.CharFilter()
@@ -50,9 +48,7 @@ class CompetitionFilter(django_filters.FilterSet):
     show_time_start = django_filters.DateTimeFromToRangeFilter()
     show_time_end = django_filters.DateTimeFromToRangeFilter()
 
-    has_entries = django_filters.BooleanFilter(
-        method="_has_entries", label=_("Has Entries")
-    )
+    has_entries = django_filters.BooleanFilter(method="_has_entries", label=_("Has Entries"))
 
     class Meta:
         model = Competition
@@ -61,9 +57,7 @@ class CompetitionFilter(django_filters.FilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        return queryset.filter(
-            Q(name__icontains=value) | Q(info__icontains=value) | Q(genre__name=value)
-        ).distinct()
+        return queryset.filter(Q(name__icontains=value) | Q(info__icontains=value) | Q(genre__name=value)).distinct()
 
     def _has_entries(self, queryset, name, value):
         return queryset.filter(Q(entries=bool(value) or None))

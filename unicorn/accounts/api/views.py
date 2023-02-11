@@ -46,9 +46,7 @@ class SearchView(ListAPIView):
     filter_backends = (DjangoFilterBackend,)
 
     def get_queryset(self):
-        if not self.request.query_params.get(
-            "q", None
-        ) and not self.request.query_params.get("usercard", None):
+        if not self.request.query_params.get("q", None) and not self.request.query_params.get("usercard", None):
             return User.objects.none()
 
         return User.objects.exclude(role=USER_ROLE_ANON)

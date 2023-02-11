@@ -43,16 +43,10 @@ class Competition(CreatedUpdatedModel, models.Model):
         on_delete=models.PROTECT,
     )
     name = models.CharField(verbose_name=_("Name"), max_length=50, unique=True)
-    brief_description = models.CharField(
-        verbose_name=_("Brief Description"), max_length=160, null=True
-    )
-    description = models.TextField(
-        verbose_name=_("Description"), null=True, blank=True, default=None
-    )
+    brief_description = models.CharField(verbose_name=_("Brief Description"), max_length=160, null=True)
+    description = models.TextField(verbose_name=_("Description"), null=True, blank=True, default=None)
     rules = models.TextField(verbose_name=_("Rules"))
-    prizes = models.JSONField(
-        verbose_name=_("Prizes"), null=True, blank=True, default=list
-    )
+    prizes = models.JSONField(verbose_name=_("Prizes"), null=True, blank=True, default=list)
     featured = models.BooleanField(
         verbose_name=_("Featured"),
         default=False,
@@ -66,15 +60,9 @@ class Competition(CreatedUpdatedModel, models.Model):
             "requirements for number of contributors and extra info"
         ),
     )
-    fileupload = models.JSONField(
-        verbose_name=_("File Upload parameters"), null=True, blank=True, default=list
-    )
-    links = models.JSONField(
-        verbose_name=_("External links"), null=True, blank=True, default=list
-    )
-    participant_limit = models.PositiveSmallIntegerField(
-        verbose_name=_("Participant Limit"), null=True, default=0
-    )
+    fileupload = models.JSONField(verbose_name=_("File Upload parameters"), null=True, blank=True, default=list)
+    links = models.JSONField(verbose_name=_("External links"), null=True, blank=True, default=list)
+    participant_limit = models.PositiveSmallIntegerField(verbose_name=_("Participant Limit"), null=True, default=0)
 
     published = models.BooleanField(
         verbose_name=_("Published"),
@@ -91,9 +79,7 @@ class Competition(CreatedUpdatedModel, models.Model):
     report_win_loss = models.BooleanField(
         verbose_name=_("Report wins/losses"),
         default=False,
-        help_text=_(
-            "Is this an externally run competition where we only report " "results?"
-        ),
+        help_text=_("Is this an externally run competition where we only report " "results?"),
     )
     rsvp = models.BooleanField(verbose_name=_("RSVP only"), default=False)
 
@@ -114,9 +100,7 @@ class Competition(CreatedUpdatedModel, models.Model):
     )
 
     sponsor_name = models.CharField(max_length=64, null=True, blank=True, default=None)
-    sponsor_logo = models.ImageField(
-        upload_to="sponsor", null=True, blank=True, default=None
-    )
+    sponsor_logo = models.ImageField(upload_to="sponsor", null=True, blank=True, default=None)
 
     team_min = models.PositiveSmallIntegerField(
         verbose_name=_("Minimum Team Size"),
@@ -135,28 +119,17 @@ class Competition(CreatedUpdatedModel, models.Model):
         max_length=32,
         null=True,
         blank=True,
-        help_text=_(
-            "Human readable string of which extra info, if any, is required "
-            "from contributors?"
-        ),
+        help_text=_("Human readable string of which extra info, if any, is required " "from contributors?"),
     )
 
     register_time_start = models.DateTimeField(
         verbose_name=_("Registration Start"), null=True, blank=True, default=None
     )
-    register_time_end = models.DateTimeField(
-        verbose_name=_("Registration End"), null=True, blank=True, default=None
-    )
-    run_time_start = models.DateTimeField(
-        verbose_name=_("Competition Start"), null=True
-    )
+    register_time_end = models.DateTimeField(verbose_name=_("Registration End"), null=True, blank=True, default=None)
+    run_time_start = models.DateTimeField(verbose_name=_("Competition Start"), null=True)
     run_time_end = models.DateTimeField(verbose_name=_("Competition End"), null=True)
-    vote_time_start = models.DateTimeField(
-        verbose_name=_("Voting Start"), null=True, blank=True, default=None
-    )
-    vote_time_end = models.DateTimeField(
-        verbose_name=_("Voting End"), null=True, blank=True, default=None
-    )
+    vote_time_start = models.DateTimeField(verbose_name=_("Voting Start"), null=True, blank=True, default=None)
+    vote_time_end = models.DateTimeField(verbose_name=_("Voting End"), null=True, blank=True, default=None)
     show_prestart_lock = models.DateTimeField(
         verbose_name=_("Pre-show lockdown start"),
         null=True,
@@ -167,12 +140,8 @@ class Competition(CreatedUpdatedModel, models.Model):
             "and related entries from the specified time to 'Showtime End'"
         ),
     )
-    show_time_start = models.DateTimeField(
-        verbose_name=_("Showtime Start"), null=True, blank=True, default=None
-    )
-    show_time_end = models.DateTimeField(
-        verbose_name=_("Showtime End"), null=True, blank=True, default=None
-    )
+    show_time_start = models.DateTimeField(verbose_name=_("Showtime Start"), null=True, blank=True, default=None)
+    show_time_end = models.DateTimeField(verbose_name=_("Showtime End"), null=True, blank=True, default=None)
 
     external_url_info = models.URLField(
         verbose_name=_("External URL for infopage"),
@@ -189,15 +158,11 @@ class Competition(CreatedUpdatedModel, models.Model):
         help_text=_("URL for logging in to external competition."),
     )
 
-    state = models.PositiveSmallIntegerField(
-        choices=COMPETITION_STATE_CHOICES, default=COMPETITION_STATE_CLOSED
-    )
+    state = models.PositiveSmallIntegerField(choices=COMPETITION_STATE_CHOICES, default=COMPETITION_STATE_CLOSED)
     scoring_complete = models.BooleanField(
         verbose_name=_("Scoring Completed"),
         default=False,
-        help_text=_(
-            "Scoring is completed and the competition is ready for handing out prices"
-        ),
+        help_text=_("Scoring is completed and the competition is ready for handing out prices"),
     )
 
     class Meta:
@@ -226,9 +191,7 @@ class Competition(CreatedUpdatedModel, models.Model):
         now = time or datetime.utcnow().replace(tzinfo=pytz.utc)
 
         if (self.register_time_start and now < self.register_time_start) or (
-            self.register_time_start is None
-            and self.run_time_start
-            and now < self.run_time_start
+            self.register_time_start is None and self.run_time_start and now < self.run_time_start
         ):
             return COMPETITION_STATE_NEW
 
@@ -239,35 +202,19 @@ class Competition(CreatedUpdatedModel, models.Model):
         ):
             return COMPETITION_STATE_REG_OPEN
 
-        elif (
-            self.register_time_end
-            and self.run_time_start
-            and self.register_time_end < now < self.run_time_start
-        ):
+        elif self.register_time_end and self.run_time_start and self.register_time_end < now < self.run_time_start:
             return COMPETITION_STATE_REG_CLOSE
 
         elif self.run_time_start < now < self.run_time_end:
             return COMPETITION_STATE_RUN
 
-        elif (
-            self.vote_time_start
-            and self.vote_time_end
-            and self.vote_time_start < now < self.vote_time_end
-        ):
+        elif self.vote_time_start and self.vote_time_end and self.vote_time_start < now < self.vote_time_end:
             return COMPETITION_STATE_VOTE
 
-        elif (
-            self.vote_time_end
-            and self.show_time_start
-            and self.vote_time_end < now < self.show_time_start
-        ):
+        elif self.vote_time_end and self.show_time_start and self.vote_time_end < now < self.show_time_start:
             return COMPETITION_STATE_VOTE_CLOSED
 
-        elif (
-            self.show_time_start
-            and self.show_time_end
-            and self.show_time_start < now < self.show_time_end
-        ):
+        elif self.show_time_start and self.show_time_end and self.show_time_start < now < self.show_time_end:
             return COMPETITION_STATE_SHOW
 
         elif self.run_time_end < now and (
@@ -287,11 +234,7 @@ class Competition(CreatedUpdatedModel, models.Model):
         state = state or self.state
 
         if state == COMPETITION_STATE_NEW:
-            return (
-                COMPETITION_STATE_REG_OPEN
-                if self.register_time_start
-                else COMPETITION_STATE_RUN
-            )
+            return COMPETITION_STATE_REG_OPEN if self.register_time_start else COMPETITION_STATE_RUN
 
         elif state == COMPETITION_STATE_REG_OPEN:
             if (self.run_time_start - self.register_time_end).seconds > 1:
@@ -303,12 +246,8 @@ class Competition(CreatedUpdatedModel, models.Model):
             return COMPETITION_STATE_RUN
 
         elif state == COMPETITION_STATE_RUN:
-            if (
-                self.vote_time_start
-                and (self.vote_time_start - self.run_time_end).seconds > 1
-            ) or (
-                self.show_time_start
-                and (self.show_time_start - self.run_time_end).seconds > 1
+            if (self.vote_time_start and (self.vote_time_start - self.run_time_end).seconds > 1) or (
+                self.show_time_start and (self.show_time_start - self.run_time_end).seconds > 1
             ):
                 return COMPETITION_STATE_CLOSED
             elif self.vote_time_start:
@@ -326,10 +265,7 @@ class Competition(CreatedUpdatedModel, models.Model):
                 return COMPETITION_STATE_SHOW
 
         elif state == COMPETITION_STATE_VOTE:
-            if (
-                self.show_time_start
-                and (self.show_time_start - self.vote_time_end).seconds > 1
-            ):
+            if self.show_time_start and (self.show_time_start - self.vote_time_end).seconds > 1:
                 return COMPETITION_STATE_VOTE_CLOSED
             elif self.show_time_start:
                 return COMPETITION_STATE_SHOW
@@ -337,11 +273,7 @@ class Competition(CreatedUpdatedModel, models.Model):
                 return COMPETITION_STATE_FIN
 
         elif state == COMPETITION_STATE_VOTE_CLOSED:
-            return (
-                COMPETITION_STATE_SHOW
-                if self.show_time_start
-                else COMPETITION_STATE_FIN
-            )
+            return COMPETITION_STATE_SHOW if self.show_time_start else COMPETITION_STATE_FIN
 
         else:
             return COMPETITION_STATE_FIN
@@ -351,46 +283,14 @@ class Competition(CreatedUpdatedModel, models.Model):
         errors = {}
 
         # Validate various date ranges
-        if (
-            self.register_time_start
-            and self.register_time_end
-            and self.register_time_start > self.register_time_end
-        ):
-            errors.update(
-                {
-                    "register_time_end": _(
-                        "Registration end time must be after registration start time"
-                    )
-                }
-            )
-        if (
-            self.run_time_start
-            and self.run_time_end
-            and self.run_time_start > self.run_time_end
-        ):
-            errors.update(
-                {
-                    "run_time_end": _(
-                        "Competition end time must be after competition start time"
-                    )
-                }
-            )
-        if (
-            self.vote_time_start
-            and self.vote_time_end
-            and self.vote_time_start > self.vote_time_end
-        ):
-            errors.update(
-                {"vote_time_end": _("Voting end time must be after voting start time")}
-            )
-        if (
-            self.show_time_start
-            and self.show_time_end
-            and self.show_time_start > self.show_time_end
-        ):
-            errors.update(
-                {"show_time_end": _("Show end time must be after show start time")}
-            )
+        if self.register_time_start and self.register_time_end and self.register_time_start > self.register_time_end:
+            errors.update({"register_time_end": _("Registration end time must be after registration start time")})
+        if self.run_time_start and self.run_time_end and self.run_time_start > self.run_time_end:
+            errors.update({"run_time_end": _("Competition end time must be after competition start time")})
+        if self.vote_time_start and self.vote_time_end and self.vote_time_start > self.vote_time_end:
+            errors.update({"vote_time_end": _("Voting end time must be after voting start time")})
+        if self.show_time_start and self.show_time_end and self.show_time_start > self.show_time_end:
+            errors.update({"show_time_end": _("Show end time must be after show start time")})
 
         if self.show_prestart_lock and not (self.show_time_start or self.show_time_end):
             errors.update(
@@ -401,67 +301,29 @@ class Competition(CreatedUpdatedModel, models.Model):
                 }
             )
 
-        if (
-            self.show_prestart_lock
-            and self.run_time_end
-            and self.show_prestart_lock < self.run_time_end
-        ):
+        if self.show_prestart_lock and self.run_time_end and self.show_prestart_lock < self.run_time_end:
             errors.update(
-                {
-                    "show_prestart_lock": _(
-                        "Pre-show lockdown start cannot be before competition run time has ended."
-                    )
-                }
+                {"show_prestart_lock": _("Pre-show lockdown start cannot be before competition run time has ended.")}
             )
 
         # Also make sure we don't open competition backwards in time
         if not self.pk:
             if self.register_time_start and self.register_time_start < now:
-                errors.update(
-                    {
-                        "register_time_start": _(
-                            "Registration start time cannot be in the past"
-                        )
-                    }
-                )
+                errors.update({"register_time_start": _("Registration start time cannot be in the past")})
             if self.run_time_start and self.run_time_start < now:
-                errors.update(
-                    {
-                        "run_time_start": _(
-                            "Competition start time cannot be in the past"
-                        )
-                    }
-                )
+                errors.update({"run_time_start": _("Competition start time cannot be in the past")})
             if self.vote_time_start and self.vote_time_start < now:
-                errors.update(
-                    {"vote_time_start": _("Voting start time cannot be in the past")}
-                )
+                errors.update({"vote_time_start": _("Voting start time cannot be in the past")})
             if self.show_time_start and self.show_time_start < now:
-                errors.update(
-                    {"show_time_start": _("Show start time cannot be in the past")}
-                )
+                errors.update({"show_time_start": _("Show start time cannot be in the past")})
 
         # And now handle logic for what starts when
-        if (
-            self.register_time_start
-            and self.register_time_end
-            and self.register_time_end > self.run_time_start
-        ):
+        if self.register_time_start and self.register_time_end and self.register_time_end > self.run_time_start:
             errors.update(
-                {
-                    "register_time_end": _(
-                        "Pre-registration must be finished before Competition run time starts"
-                    )
-                }
+                {"register_time_end": _("Pre-registration must be finished before Competition run time starts")}
             )
-        if (
-            self.vote_time_start
-            and self.vote_time_end
-            and self.vote_time_start < self.run_time_end
-        ):
-            errors.update(
-                {"vote_time_start": _("Voting cannot open until Competition has ended")}
-            )
+        if self.vote_time_start and self.vote_time_end and self.vote_time_start < self.run_time_end:
+            errors.update({"vote_time_start": _("Voting cannot open until Competition has ended")})
 
         # Make sure team sizes make sense
         if self.team_min and not self.team_max:
@@ -469,19 +331,11 @@ class Competition(CreatedUpdatedModel, models.Model):
         if self.team_max and not self.team_min:
             errors.update({"team_min": _("Please also fill out Minimum Team Size")})
         if (self.team_min and self.team_max) and self.team_min > self.team_max:
-            errors.update(
-                {
-                    "team_max": _(
-                        "Maximum Team Size cannot be smaller than the minimum size"
-                    )
-                }
-            )
+            errors.update({"team_max": _("Maximum Team Size cannot be smaller than the minimum size")})
 
         # Make sure header image is credited
         if self.header_image and not self.header_credit:
-            errors.update(
-                {"header_credit": _("Please add credit for the header image")}
-            )
+            errors.update({"header_credit": _("Please add credit for the header image")})
 
         if errors:
             raise ValidationError(errors)
@@ -491,12 +345,8 @@ class Competition(CreatedUpdatedModel, models.Model):
         def r(dt):
             return round_seconds(dt, "down", 60)
 
-        self.register_time_start = (
-            r(self.register_time_start) if self.register_time_start else None
-        )
-        self.register_time_end = (
-            r(self.register_time_end) if self.register_time_end else None
-        )
+        self.register_time_start = r(self.register_time_start) if self.register_time_start else None
+        self.register_time_end = r(self.register_time_end) if self.register_time_end else None
         self.run_time_start = r(self.run_time_start) if self.run_time_start else None
         self.run_time_end = r(self.run_time_end) if self.run_time_end else None
         self.vote_time_start = r(self.vote_time_start) if self.vote_time_start else None
@@ -530,9 +380,7 @@ class Entry(CreatedUpdatedModel, models.Model):
         choices=ENTRY_STATUS_CHOICES,
         default=ENTRY_STATUS_DRAFT,
     )
-    status_comment = models.TextField(
-        verbose_name=_("Status Comment"), blank=True, null=True, default=None
-    )
+    status_comment = models.TextField(verbose_name=_("Status Comment"), blank=True, null=True, default=None)
     extra_info = models.CharField(
         verbose_name=_("Extra Info"),
         max_length=128,
@@ -568,12 +416,8 @@ class Entry(CreatedUpdatedModel, models.Model):
         default=None,
     )
 
-    comment = models.TextField(
-        verbose_name=_("Comment"), blank=True, null=True, default=None
-    )
-    score = models.PositiveSmallIntegerField(
-        verbose_name=_("Score"), default=0, help_text=_("Between 0 and 32767")
-    )
+    comment = models.TextField(verbose_name=_("Comment"), blank=True, null=True, default=None)
+    score = models.PositiveSmallIntegerField(verbose_name=_("Score"), default=0, help_text=_("Between 0 and 32767"))
 
     class Meta:
         ordering = ("order", "title")
@@ -599,28 +443,22 @@ class Entry(CreatedUpdatedModel, models.Model):
         jury_weight = 1 - mortal_weight
 
         # Sum up the vote scores from non-jury votes on this entry, and return 0 if there is none
-        mortal_score = Vote.objects.filter(Q(entry=self), Q(jury=False)).aggregate(
-            Sum("score")
-        )["score__sum"]
+        mortal_score = Vote.objects.filter(Q(entry=self), Q(jury=False)).aggregate(Sum("score"))["score__sum"]
         if not mortal_score:
             return 0
 
         # Sum all vote scores for the current competition
-        mortal_sum = Vote.objects.filter(
-            Q(entry__competition=self.competition), Q(jury=False)
-        ).aggregate(Sum("score"))["score__sum"]
-        jury_sum = Vote.objects.filter(
-            Q(entry__competition=self.competition), Q(jury=True)
-        ).aggregate(Sum("score"))["score__sum"]
+        mortal_sum = Vote.objects.filter(Q(entry__competition=self.competition), Q(jury=False)).aggregate(Sum("score"))[
+            "score__sum"
+        ]
+        jury_sum = Vote.objects.filter(Q(entry__competition=self.competition), Q(jury=True)).aggregate(Sum("score"))[
+            "score__sum"
+        ]
 
         # Calculate the vote score from jury votes on this entry
         if jury_sum:
-            jury_self = Vote.objects.filter(Q(entry=self), Q(jury=True)).aggregate(
-                Sum("score")
-            )["score__sum"]
-            jury_score = jury_self * (
-                ((mortal_sum / mortal_weight) * jury_weight) / jury_sum
-            )
+            jury_self = Vote.objects.filter(Q(entry=self), Q(jury=True)).aggregate(Sum("score"))["score__sum"]
+            jury_score = jury_self * (((mortal_sum / mortal_weight) * jury_weight) / jury_sum)
         else:
             jury_score = 0
 
@@ -641,11 +479,7 @@ class Entry(CreatedUpdatedModel, models.Model):
     def clean(self):
         errors = {}
         if not self.competition.published:
-            errors.update(
-                {
-                    "competition": "This competition is not currently available for entry registrations!"
-                }
-            )
+            errors.update({"competition": "This competition is not currently available for entry registrations!"})
 
         if (
             not self.pk
@@ -655,16 +489,10 @@ class Entry(CreatedUpdatedModel, models.Model):
             errors.update({"competition": "This competition is currently full!"})
 
         if not self.pk:
-            if (
-                self.competition.state != COMPETITION_STATE_REG_OPEN
-                and self.competition.register_time_start
-            ) or (
-                self.competition.state != COMPETITION_STATE_RUN
-                and not self.competition.register_time_start
+            if (self.competition.state != COMPETITION_STATE_REG_OPEN and self.competition.register_time_start) or (
+                self.competition.state != COMPETITION_STATE_RUN and not self.competition.register_time_start
             ):
-                errors.update(
-                    {"competition": "Registrations are closed for this competition!"}
-                )
+                errors.update({"competition": "Registrations are closed for this competition!"})
 
         if errors:
             raise ValidationError(errors)
@@ -683,9 +511,7 @@ class Contributor(models.Model):
         on_delete=models.CASCADE,
         related_name="user_to_entry",
     )
-    extra_info = models.CharField(
-        verbose_name=_("Extra Info"), max_length=64, blank=True, null=True
-    )
+    extra_info = models.CharField(verbose_name=_("Extra Info"), max_length=64, blank=True, null=True)
     is_owner = models.BooleanField(verbose_name=_("Entry Owner"), default=False)
 
     def clean(self):
@@ -696,9 +522,7 @@ class Contributor(models.Model):
             pass
         else:
             if (self.pk and self.pk != exists.pk) or (not self.pk and exists):
-                errors.update(
-                    {"user": "This user is already a contributor to selected entry!"}
-                )
+                errors.update({"user": "This user is already a contributor to selected entry!"})
 
         if self.entry.status is not ENTRY_STATUS_DRAFT and (
             self.entry.competition.contributor_extra and not self.extra_info
@@ -708,15 +532,11 @@ class Contributor(models.Model):
         if errors:
             raise ValidationError(errors)
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         # saving a file as active will forcibly make the last one not active
         if self.is_owner:
             try:
-                old_owner = Contributor.objects.get(
-                    Q(entry=self.entry), Q(is_owner=True)
-                )
+                old_owner = Contributor.objects.get(Q(entry=self.entry), Q(is_owner=True))
                 if self.pk and self.pk is not old_owner.pk:
                     old_owner.is_owner = False
                     old_owner.save()
@@ -764,9 +584,7 @@ class File(CreatedUpdatedModel, models.Model):
         for t in self.entry.competition.fileupload:
             allowed_types.append(t["type"])
         if self.type not in allowed_types:
-            errors.update(
-                {"type": "Specified type is not permitted for this competition"}
-            )
+            errors.update({"type": "Specified type is not permitted for this competition"})
 
         if (
             not self.uploader.has_perm("competitions.view_entry_crewmsg")
@@ -777,15 +595,11 @@ class File(CreatedUpdatedModel, models.Model):
         if errors:
             raise ValidationError(errors)
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         # saving a file as active will forcibly make the last one not active
         if self.active:
             try:
-                old_file = File.objects.get(
-                    Q(entry=self.entry), Q(type=self.type), Q(active=True)
-                )
+                old_file = File.objects.get(Q(entry=self.entry), Q(type=self.type), Q(active=True))
                 old_file.active = False
                 old_file.save()
             except ObjectDoesNotExist:
@@ -801,9 +615,7 @@ class Vote(models.Model):
         related_name="votes",
         on_delete=models.CASCADE,
     )
-    user = models.ForeignKey(
-        verbose_name=_("User"), to="accounts.User", on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(verbose_name=_("User"), to="accounts.User", on_delete=models.CASCADE)
     score = models.PositiveSmallIntegerField(
         verbose_name=_("Score"),
         help_text=_("A number between 1 and 5"),
@@ -826,9 +638,7 @@ class Vote(models.Model):
                 errors.update(
                     {
                         "entry": "User has already voted on this entry! (ID: {}) Please update "
-                        "existing vote object insted on creating a new.".format(
-                            exists.pk
-                        )
+                        "existing vote object insted on creating a new.".format(exists.pk)
                     }
                 )
 
@@ -836,16 +646,12 @@ class Vote(models.Model):
             errors.update({"entry": "It is not possible to vote in this entry now"})
 
         if self.user in self.entry.contributors.all():
-            errors.update(
-                {"user": "You cannot vote on entries you have contributed to"}
-            )
+            errors.update({"user": "You cannot vote on entries you have contributed to"})
 
         if errors:
             raise ValidationError(errors)
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         # set jury field based on user role
         if self.user.role == USER_ROLE_JURY:
             self.jury = True

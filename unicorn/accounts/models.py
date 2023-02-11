@@ -20,9 +20,7 @@ from .constants import (
 
 
 class User(AbstractUser, GuardianUserMixin):
-    uuid = models.UUIDField(
-        verbose_name=_("UUID"), default=uuid.uuid4, editable=False, primary_key=True
-    )
+    uuid = models.UUIDField(verbose_name=_("UUID"), default=uuid.uuid4, editable=False, primary_key=True)
     role = models.CharField(
         verbose_name=_("Role"),
         max_length=16,
@@ -31,9 +29,7 @@ class User(AbstractUser, GuardianUserMixin):
     )
     username_overridden = models.BooleanField(
         default=False,
-        help_text=_(
-            "User has manually set a custom username. This will stop automatic updates from social providers."
-        ),
+        help_text=_("User has manually set a custom username. This will stop automatic updates from social providers."),
     )
     display_name_format = models.CharField(
         verbose_name=_("Display Name format"),
@@ -55,13 +51,9 @@ class User(AbstractUser, GuardianUserMixin):
         max_length=16,
         blank=True,
         null=True,
-        help_text=_(
-            "Must be in valid E.164 format (international with + prefix). Up to 15 digits allowed."
-        ),
+        help_text=_("Must be in valid E.164 format (international with + prefix). Up to 15 digits allowed."),
     )
-    zip = models.CharField(
-        verbose_name=_("Zip Code"), max_length=16, blank=True, null=True
-    )
+    zip = models.CharField(verbose_name=_("Zip Code"), max_length=16, blank=True, null=True)
     birth = models.DateField(
         verbose_name=_("Birth Date"),
         default=None,
@@ -80,13 +72,9 @@ class User(AbstractUser, GuardianUserMixin):
     approved_for_pii = models.BooleanField(
         verbose_name=_("Approved for PII"),
         default=False,
-        help_text=_(
-            "User is approved for interacting with PII data on other accounts."
-        ),
+        help_text=_("User is approved for interacting with PII data on other accounts."),
     )
-    accepted_location = models.BooleanField(
-        verbose_name=_("Has accepted location tracking"), default=False
-    )
+    accepted_location = models.BooleanField(verbose_name=_("Has accepted location tracking"), default=False)
     row = models.PositiveSmallIntegerField(
         verbose_name=_("row"), null=True, blank=True, validators=[MinValueValidator(1)]
     )
@@ -96,9 +84,7 @@ class User(AbstractUser, GuardianUserMixin):
     checked_in = models.BooleanField(
         verbose_name=_("checked in"),
         default=False,
-        help_text=_(
-            "Designates whether the user has been physically checked in to the event or not."
-        ),
+        help_text=_("Designates whether the user has been physically checked in to the event or not."),
     )
     crew = models.JSONField(verbose_name=_("crew details"), null=True, blank=True)
 
@@ -138,11 +124,7 @@ class UserCardManager(models.Manager):
         try:
             card = super(UserCardManager, self).get(*args, **kwargs)
         except ObjectDoesNotExist:
-            value = (
-                kwargs.get("value__iexact")
-                if kwargs.get("value__iexact")
-                else kwargs.get("value")
-            )
+            value = kwargs.get("value__iexact") if kwargs.get("value__iexact") else kwargs.get("value")
             card = self.fetch_from_wannabe(value)
 
         if not card:
@@ -180,9 +162,7 @@ class UserCardManager(models.Manager):
 
 
 class UserCard(models.Model):
-    user = models.ForeignKey(
-        to=User, related_name="usercards", on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(to=User, related_name="usercards", on_delete=models.CASCADE)
     value = models.CharField(max_length=16, unique=True)
 
     class Meta:
@@ -194,9 +174,7 @@ class UserCard(models.Model):
 
 class AutoCrew(models.Model):
     crew = models.CharField(max_length=128, db_index=True)
-    group = models.ForeignKey(
-        to=Group, related_name="autocrews", on_delete=models.CASCADE
-    )
+    group = models.ForeignKey(to=Group, related_name="autocrews", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ("crew",)

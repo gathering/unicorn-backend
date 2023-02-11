@@ -1,6 +1,7 @@
 from accounts.constants import USER_DISPLAY_AKA, USER_ROLE_ANON
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import get_objects_for_user
@@ -42,9 +43,7 @@ class StandardObjectPermissions(permissions.DjangoObjectPermissions):
         if getattr(view, "_ignore_model_permissions", False):
             return True
 
-        if not request.user or (
-            not request.user.is_authenticated and self.authenticated_users_only
-        ):
+        if not request.user or (not request.user.is_authenticated and self.authenticated_users_only):
             return False
 
         if request.method in SAFE_METHODS:
@@ -91,9 +90,7 @@ class StandardObjectPermissions(permissions.DjangoObjectPermissions):
                 raise Http404
 
             read_perms = self.get_required_object_permissions("GET", model_cls)
-            if not user.has_perms(read_perms, obj) and not anon.has_perms(
-                read_perms, obj
-            ):
+            if not user.has_perms(read_perms, obj) and not anon.has_perms(read_perms, obj):
                 raise Http404
 
             # nope
@@ -108,18 +105,12 @@ class IsAuthenticatedAndNotAnon(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return (
-            request.user
-            and request.user.is_authenticated
-            and request.user.role is not USER_ROLE_ANON
-        )
+        return request.user and request.user.is_authenticated and request.user.role is not USER_ROLE_ANON
 
 
 class PermissionRequiredMixinWithAnonymous(PermissionRequiredMixin):
     def check_permissions(self, request):
-        forbidden = super(PermissionRequiredMixinWithAnonymous, self).check_permissions(
-            request
-        )
+        forbidden = super(PermissionRequiredMixinWithAnonymous, self).check_permissions(request)
         if forbidden:
             perms = self.get_required_permissions(request)
             anon = get_user_model().get_anonymous()
@@ -140,10 +131,8 @@ class DjangoObjectPermissionsFilter(BaseFilterBackend):
     shortcut_kwargs = {"accept_global_perms": True}
 
     def __init__(self):
-        assert "guardian" in settings.INSTALLED_APPS, (
-            "Using DjangoObjectPermissionsFilter, "
-            "but django-guardian is not installed."
-        )
+        if "guardian" not in settings.INSTALLED_APPS:
+            raise ImproperlyConfigured("Using DjangoObjectPermissionsFilter, but django-guardian is not installed.")
 
     def filter_queryset(self, request, queryset, view):
         # We want to defer this import until runtime, rather than import-time.
@@ -159,12 +148,8 @@ class DjangoObjectPermissionsFilter(BaseFilterBackend):
             "model_name": queryset.model._meta.model_name,
         }
 
-        user_objects = get_objects_for_user(
-            user, permission, queryset, **self.shortcut_kwargs
-        )
-        anon_objects = get_objects_for_user(
-            anon, permission, queryset, **self.shortcut_kwargs
-        )
+        user_objects = get_objects_for_user(user, permission, queryset, **self.shortcut_kwargs)
+        anon_objects = get_objects_for_user(anon, permission, queryset, **self.shortcut_kwargs)
 
         objects = user_objects | anon_objects
         return objects.distinct()

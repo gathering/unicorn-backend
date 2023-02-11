@@ -14,20 +14,13 @@ class Command(BaseCommand):
     help = "Runs through all entries and updates status based on given parameters"
 
     def handle(self, *args, **kwargs):
-        self.stdout.write(
-            "=== Starting entry_status_progress at %s" % datetime.now().replace(tzinfo=pytz.utc)
-        )
+        self.stdout.write("=== Starting entry_status_progress at %s" % datetime.now().replace(tzinfo=pytz.utc))
         for entry in Entry.objects.all().prefetch_related("competition"):
             is_valid = entry.validate_contributors()
 
-            if (
-                is_valid
-                and entry.competition.autoqualify
-                and entry.status == ENTRY_STATUS_DRAFT
-            ):
+            if is_valid and entry.competition.autoqualify and entry.status == ENTRY_STATUS_DRAFT:
                 self.stdout.write(
-                    '+ Entry "%s" in %s was progressed from Draft to Qualified'
-                    % (entry.title, entry.competition.name)
+                    '+ Entry "%s" in %s was progressed from Draft to Qualified' % (entry.title, entry.competition.name)
                 )
                 entry.status = ENTRY_STATUS_QUALIFIED
                 entry.save()
@@ -35,18 +28,12 @@ class Command(BaseCommand):
 
             if is_valid and entry.status == ENTRY_STATUS_DRAFT:
                 self.stdout.write(
-                    '+ Entry "%s" in %s was progressed from Draft to New'
-                    % (entry.title, entry.competition.name)
+                    '+ Entry "%s" in %s was progressed from Draft to New' % (entry.title, entry.competition.name)
                 )
                 entry.status = ENTRY_STATUS_NEW
                 entry.save()
                 continue
 
-            self.stdout.write(
-                '- Entry "%s" in %s was not updated'
-                % (entry.title, entry.competition.name)
-            )
+            self.stdout.write('- Entry "%s" in %s was not updated' % (entry.title, entry.competition.name))
 
-        self.stdout.write(
-            "=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc), ending="\n\n"
-        )
+        self.stdout.write("=== Finished at %s" % datetime.now().replace(tzinfo=pytz.utc), ending="\n\n")

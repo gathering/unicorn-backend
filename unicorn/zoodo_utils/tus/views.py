@@ -22,15 +22,12 @@ TUS_SETTINGS = {}
 
 
 class TusUpload(APIView):
-
     parser_classes = (TusUploadParser,)
 
     queryset = File.objects.none()
 
     TUS_UPLOAD_URL = getattr(settings, "TUS_UPLOAD_URL", "/media")
-    TUS_UPLOAD_DIR = getattr(
-        settings, "TUS_UPLOAD_DIR", os.path.join(settings.BASE_DIR, "tmp/uploads/")
-    )
+    TUS_UPLOAD_DIR = getattr(settings, "TUS_UPLOAD_DIR", os.path.join(settings.BASE_DIR, "tmp/uploads/"))
     TUS_DESTINATION_DIR = getattr(settings, "TUS_DESTINATION_DIR", settings.MEDIA_ROOT)
     TUS_MAX_FILE_SIZE = getattr(settings, "TUS_MAX_FILE_SIZE", 4294967296)  # in bytes
     TUS_FILE_OVERWRITE = getattr(settings, "TUS_FILE_OVERWRITE", True)
@@ -64,9 +61,7 @@ class TusUpload(APIView):
         response["Tus-Max-Size"] = self.TUS_MAX_FILE_SIZE
         response["Access-Control-Allow-Origin"] = "*"
         response["Access-Control-Allow-Methods"] = "PATCH,HEAD,GET,POST,OPTIONS"
-        response[
-            "Access-Control-Expose-Headers"
-        ] = "Tus-Resumable,upload-length,upload-metadata,Location,Upload-Offset"
+        response["Access-Control-Expose-Headers"] = "Tus-Resumable,upload-length,upload-metadata,Location,Upload-Offset"
         response[
             "Access-Control-Allow-Headers"
         ] = "Tus-Resumable,upload-length,upload-metadata,Location,Upload-Offset,content-type,X-Unicorn-Entry-Id,X-Unicorn-File-Type"  # noqa: E501
@@ -131,13 +126,9 @@ class TusUpload(APIView):
 
         if request.META.get("HTTP_TUS_RESUMABLE", None) is None:
             # in dispatch auslagern?
-            logger.warning(
-                "Received File upload for unsupported file transfer protocol"
-            )
+            logger.warning("Received File upload for unsupported file transfer protocol")
             response.status_code = 500
-            response.reason_phrase = (
-                "Received File upload for unsupported file transfer protocol"
-            )
+            response.reason_phrase = "Received File upload for unsupported file transfer protocol"
 
         if request.method == "OPTIONS":
             # eigene Methode
@@ -167,9 +158,7 @@ class TusUpload(APIView):
 
         try:
             if (
-                os.path.lexists(
-                    os.path.join(self.TUS_UPLOAD_DIR, metadata.get("filename"))
-                )
+                os.path.lexists(os.path.join(self.TUS_UPLOAD_DIR, metadata.get("filename")))
                 and self.TUS_FILE_OVERWRITE is False
             ):
                 response.status_code = 409
@@ -190,13 +179,9 @@ class TusUpload(APIView):
             "{}".format(metadata.get("filename")),
             self.TUS_TIMEOUT,
         )
-        cache.add(
-            "tus-uploads/{}/file_size".format(resource_id), file_size, self.TUS_TIMEOUT
-        )
+        cache.add("tus-uploads/{}/file_size".format(resource_id), file_size, self.TUS_TIMEOUT)
         cache.add("tus-uploads/{}/offset".format(resource_id), 0, self.TUS_TIMEOUT)
-        cache.add(
-            "tus-uploads/{}/metadata".format(resource_id), metadata, self.TUS_TIMEOUT
-        )
+        cache.add("tus-uploads/{}/metadata".format(resource_id), metadata, self.TUS_TIMEOUT)
         cache.add(
             "tus-uploads/{}/type".format(resource_id),
             request.META.get("HTTP_X_UNICORN_FILE_TYPE", self.TUS_TIMEOUT),
@@ -205,16 +190,14 @@ class TusUpload(APIView):
         try:
             entry_id = request.META.get("HTTP_X_UNICORN_ENTRY_ID")
             entry = Entry.objects.get(pk=entry_id)
-            cache.add(
-                "tus-uploads/{}/entry".format(resource_id), entry.pk, self.TUS_TIMEOUT
-            )
+            cache.add("tus-uploads/{}/entry".format(resource_id), entry.pk, self.TUS_TIMEOUT)
         except ObjectDoesNotExist:
             response.status_code = 400
             response.reason_phrase = "No matching entry for this upload"
             return response
 
         try:
-            f = open(os.path.join(self.TUS_UPLOAD_DIR, resource_id), "wb")
+            f = os.fdopen(os.open(os.path.join(self.TUS_UPLOAD_DIR, resource_id), "wb"))
             f.seek(file_size)
             f.write(b"\0")
             f.close()
@@ -249,7 +232,6 @@ class TusUpload(APIView):
         return response
 
     def patch(self, request, *args, **kwargs):
-
         response = self.get_tus_response()
 
         resource_id = kwargs.get("resource_id", None)
@@ -289,9 +271,9 @@ class TusUpload(APIView):
         # )
 
         try:
-            file = open(upload_file_path, "r+b")
+            file = os.fdopen(os.open(upload_file_path, "r+b"))
         except IOError:
-            file = open(upload_file_path, "wb")
+            file = os.fdopen(os.open(upload_file_path, "wb"))
         finally:
             file.seek(file_offset)
             file.write(request.body)
@@ -300,15 +282,11 @@ class TusUpload(APIView):
         new_offset = cache.incr("tus-uploads/{}/offset".format(resource_id), chunk_size)
         response["Upload-Offset"] = new_offset
         # logger.error("pre_finish_check")
-        if (
-            file_size == new_offset
-        ):  # file transfer complete, rename from resource id to actual filename
+        if file_size == new_offset:  # file transfer complete, rename from resource id to actual filename
             # logger.error("post_finish_check")
 
             filename = uuid.uuid4().hex + "_" + filename
-            shutil.move(
-                upload_file_path, os.path.join(self.TUS_DESTINATION_DIR, filename)
-            )
+            shutil.move(upload_file_path, os.path.join(self.TUS_DESTINATION_DIR, filename))
             cache.delete_many(
                 [
                     "tus-uploads/{}/file_size".format(resource_id),

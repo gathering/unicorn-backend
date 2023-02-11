@@ -91,9 +91,7 @@ def serialize_object(obj, extra=None):
 
     # Include any custom fields
     if hasattr(obj, "get_custom_fields"):
-        data["custom_fields"] = {
-            field.name: str(value) for field, value in obj.get_custom_fields().items()
-        }
+        data["custom_fields"] = {field.name: str(value) for field, value in obj.get_custom_fields().items()}
 
     # Include any tags
     if hasattr(obj, "tags"):
@@ -107,16 +105,12 @@ def serialize_object(obj, extra=None):
 
 
 def round_minutes(dt, direction, resolution):
-    new_minute = (
-        dt.minute // resolution + (1 if direction == "up" else 0)
-    ) * resolution
+    new_minute = (dt.minute // resolution + (1 if direction == "up" else 0)) * resolution
     return dt + datetime.timedelta(minutes=new_minute - dt.minute)
 
 
 def round_seconds(dt, direction, resolution):
-    new_second = (
-        dt.second // resolution + (1 if direction == "up" else 0)
-    ) * resolution
+    new_second = (dt.second // resolution + (1 if direction == "up" else 0)) * resolution
     return dt + datetime.timedelta(seconds=new_second - dt.second)
 
 

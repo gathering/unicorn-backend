@@ -29,12 +29,8 @@ class CompetitionModelTestCase(TestCase):
     def setUp(self):
         # create genres
         self.genre1 = Genre.objects.create(category=GENRE_CATEGORY_OTHER, name="Other")
-        self.genre2 = Genre.objects.create(
-            category=GENRE_CATEGORY_CREATIVE, name="Music"
-        )
-        self.genre3 = Genre.objects.create(
-            category=GENRE_CATEGORY_CREATIVE, name="Programming"
-        )
+        self.genre2 = Genre.objects.create(category=GENRE_CATEGORY_CREATIVE, name="Music")
+        self.genre3 = Genre.objects.create(category=GENRE_CATEGORY_CREATIVE, name="Programming")
         self.genre4 = Genre.objects.create(category=GENRE_CATEGORY_GAME, name="Game")
 
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -393,9 +389,7 @@ class CompetitionModelTestCase(TestCase):
 
             # make sure the state machine returns what we expect
             self.assertEqual(self.competition1.compute_state(time=now), state)
-            self.assertEqual(
-                self.competition1.compute_next_state(state=state), next_state
-            )
+            self.assertEqual(self.competition1.compute_next_state(state=state), next_state)
 
     def test_next_state(self):
         """Competition next_state property should return correct next state"""

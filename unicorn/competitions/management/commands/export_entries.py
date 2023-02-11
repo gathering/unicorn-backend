@@ -26,19 +26,13 @@ class Command(BaseCommand):
             self.stdout.write("- Starting on competition '{}'".format(compo.name))
 
             # strip all kinds of special characters from the compo name and create a folder
-            compo_dir = (
-                base_path + "/" + "".join(char for char in compo.name if char.isalnum())
-            )
+            compo_dir = base_path + "/" + "".join(char for char in compo.name if char.isalnum())
             if not os.path.exists(compo_dir):
                 self.stdout.write("+ Competition directory does not exist, creating..")
                 try:
                     os.mkdir(compo_dir)
                 except OSError:
-                    self.stderr.write(
-                        "!! Failed to create directory for competition {}".format(
-                            compo.name
-                        )
-                    )
+                    self.stderr.write("!! Failed to create directory for competition {}".format(compo.name))
                     continue
 
             for entry in compo.entries.filter(status=ENTRY_STATUS_QUALIFIED):
@@ -50,9 +44,7 @@ class Command(BaseCommand):
                     continue
 
                 # build some names
-                title = "".join(
-                    char for char in entry.title if char.isalnum() or char == " "
-                )
+                title = "".join(char for char in entry.title if char.isalnum() or char == " ")
                 owner_obj = Contributor.objects.get(entry=entry, is_owner=True)
                 name = owner_obj.user.display_name
                 owner = "".join(char for char in name if char.isalnum() or char == " ")
@@ -69,8 +61,4 @@ class Command(BaseCommand):
                 # build new path and copy file
                 file_path = compo_dir + "/" + title + " by " + owner + ending
                 shutil.copy(f.file.path, file_path.replace(" ", "_"))
-                self.stdout.write(
-                    "++ Copied {} MB file".format(
-                        str(round(f.file.size / 1024 / 1024, 2))
-                    )
-                )
+                self.stdout.write("++ Copied {} MB file".format(str(round(f.file.size / 1024 / 1024, 2))))

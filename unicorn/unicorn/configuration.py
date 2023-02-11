@@ -13,9 +13,7 @@ import dj_database_url
 #
 # Example: ALLOWED_HOSTS = ['unicorn.example.com', 'unicorn.internal.local']
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://*,https://*").split(
-    ","
-)
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://*,https://*").split(",")
 
 # PostgreSQL database configuration.
 if os.getenv("DATABASE_URL"):
@@ -28,9 +26,7 @@ else:
         "USER": os.getenv("DATABASE_USER", ""),  # PostgreSQL username
         "PASSWORD": os.getenv("DATABASE_PASSWORD", ""),  # PostgreSQL password
         "HOST": os.getenv("DATABASE_HOST", "localhost"),  # Database server
-        "PORT": os.getenv(
-            "DATABASE_PORT", ""
-        ),  # Database port (leave blank for default)
+        "PORT": os.getenv("DATABASE_PORT", ""),  # Database port (leave blank for default)
     }
 
 # This key is used for secure generation of random numbers and strings. It must never be exposed outside of this file.

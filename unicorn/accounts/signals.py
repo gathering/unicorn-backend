@@ -33,9 +33,7 @@ def build_discord_avatar_url(instance, **kwargs):
 
     avatar = instance.extra_data.get("avatar")
     if avatar:
-        instance.extra_data[
-            "avatar"
-        ] = f"https://cdn.discordapp.com/avatars/{instance.uid}/{avatar}.png"
+        instance.extra_data["avatar"] = f"https://cdn.discordapp.com/avatars/{instance.uid}/{avatar}.png"
 
 
 @receiver(post_save, sender=UserSocialAuth)

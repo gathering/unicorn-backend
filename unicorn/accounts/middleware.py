@@ -14,9 +14,7 @@ class CustomSocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
         else:
             backend = getattr(exception, "backend", {})
             if getattr(backend, "name", "") == "wannabe":
-                return reverse(
-                    "accounts:login-provider", kwargs={"provider": "wannabe"}
-                )
+                return reverse("accounts:login-provider", kwargs={"provider": "wannabe"})
 
             return request.session.get("next", None) or reverse("accounts:login")
 

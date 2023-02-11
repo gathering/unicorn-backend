@@ -24,9 +24,7 @@ class MatchRequest(CreatedUpdatedModel, models.Model):
     )
     active = models.BooleanField(verbose_name=_("active"), default=True)
     text = models.TextField(verbose_name=_("description"))
-    rank = models.PositiveSmallIntegerField(
-        verbose_name=_("rank"), choices=MATCH_REQUEST_RANKS
-    )
+    rank = models.PositiveSmallIntegerField(verbose_name=_("rank"), choices=MATCH_REQUEST_RANKS)
     role = models.TextField(verbose_name=_("role"))
     looking_for = models.PositiveSmallIntegerField(
         verbose_name=_("looking for"),

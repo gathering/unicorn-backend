@@ -19,9 +19,7 @@ class UserModelTestCase(TestCase):
         )
 
     def test_str(self):
-        self.assertEqual(
-            str(self.user1), f"{self.user1.display_name} ({self.user1.uuid})"
-        )
+        self.assertEqual(str(self.user1), f"{self.user1.display_name} ({self.user1.uuid})")
 
     def test_id(self):
         self.assertEqual(self.user1.id, self.user1.uuid)

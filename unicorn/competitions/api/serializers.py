@@ -83,9 +83,7 @@ class FileSerializer(ValidatedModelSerializer):
 
 
 class CompetitionSerializer(ValidatedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="competitions-api:competition-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="competitions-api:competition-detail")
     genre = NestedGenreSerializer()
     state = ChoiceField(choices=COMPETITION_STATE_CHOICES, read_only=True)
     next_state = ChoiceField(choices=COMPETITION_STATE_CHOICES, read_only=True)
@@ -94,9 +92,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
     def __init__(self, *args, **kwargs):
         super(CompetitionSerializer, self).__init__(*args, **kwargs)
 
-        if self.context.get("request") and not self.context["request"].user.has_perm(
-            "view_entry"
-        ):
+        if self.context.get("request") and not self.context["request"].user.has_perm("view_entry"):
             self.fields.pop("entries")
 
     class Meta:
@@ -162,9 +158,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
         # stop update if compo is locked
         if instance.is_locked:
             raise ValidationError(
-                {
-                    "error": "This competition is currently locked down pending stage show, and no edits are permitted."
-                }
+                {"error": "This competition is currently locked down pending stage show, and no edits are permitted."}
             )
 
         return super(CompetitionSerializer, self).update(instance, validated_data)
@@ -191,14 +185,10 @@ class EntryContributorSerializer(WritableNestedSerializer):
 
 
 class EntrySerializer(ValidatedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="competitions-api:entry-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="competitions-api:entry-detail")
     competition = NestedCompetitionSerializer()
     status = ChoiceField(choices=ENTRY_STATUS_CHOICES, default=ENTRY_STATUS_NEW)
-    contributors = EntryContributorSerializer(
-        read_only=True, source="entry_to_user", many=True
-    )
+    contributors = EntryContributorSerializer(read_only=True, source="entry_to_user", many=True)
     files = FileSerializer(read_only=True, many=True)
     is_contributor = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
@@ -231,9 +221,7 @@ class EntrySerializer(ValidatedModelSerializer):
         # stop update if compo is locked down
         if instance.competition.is_locked:
             raise ValidationError(
-                {
-                    "error": "This competition is currently locked down pending stage show, and no edits are permitted."
-                }
+                {"error": "This competition is currently locked down pending stage show, and no edits are permitted."}
             )
 
         info = model_meta.get_field_info(instance)
@@ -254,9 +242,7 @@ class EntrySerializer(ValidatedModelSerializer):
     def create(self, validated_data):
         instance = super(EntrySerializer, self).create(validated_data)
 
-        Contributor.objects.create(
-            entry_id=instance.pk, user_id=self.context["request"].user.pk, is_owner=True
-        )
+        Contributor.objects.create(entry_id=instance.pk, user_id=self.context["request"].user.pk, is_owner=True)
 
         return instance
 
@@ -288,9 +274,7 @@ class EntrySerializer(ValidatedModelSerializer):
         except Contributor.DoesNotExist:
             return None
 
-        if self.context["request"] and self.context["request"].user.has_perm(
-            "competitions.view_entry_crewmsg"
-        ):
+        if self.context["request"] and self.context["request"].user.has_perm("competitions.view_entry_crewmsg"):
             return NestedUserWithDetailsSerializer(instance=contributor.user).data
         else:
             return NestedUserSerializer(instance=contributor.user).data
@@ -312,9 +296,7 @@ class EntryVoteSerializer(ValidatedModelSerializer):
     def get_files(self, obj):
         request = self.context.get("request")
         qs = File.objects.filter(entry=obj, active=True)
-        return NestedFileVoteSerializer(
-            many=True, instance=qs, context={"request": request}
-        ).data
+        return NestedFileVoteSerializer(many=True, instance=qs, context={"request": request}).data
 
 
 #
@@ -337,26 +319,18 @@ class ContributorSerializer(ValidatedModelSerializer):
 
     def create(self, validated_data):
         try:
-            owner = Contributor.objects.get(
-                is_owner=True, entry_id=validated_data["entry"].id
-            )
+            owner = Contributor.objects.get(is_owner=True, entry_id=validated_data["entry"].id)
         except Contributor.DoesNotExist:
-            raise serializers.ValidationError(
-                "Unable to add contributor as there is no owner of this entry"
-            )
+            raise serializers.ValidationError("Unable to add contributor as there is no owner of this entry")
 
         if not owner.user.id == self.context["request"].user.pk:
-            raise serializers.ValidationError(
-                "Only the owner of an entry can add contributors"
-            )
+            raise serializers.ValidationError("Only the owner of an entry can add contributors")
 
         # stop creation if compo is locked down
         entry = Entry.objects.get(id=validated_data["entry"].id)
         if entry.competition.is_locked:
             raise ValidationError(
-                {
-                    "error": "This competition is currently locked down pending stage show, and no edits are permitted."
-                }
+                {"error": "This competition is currently locked down pending stage show, and no edits are permitted."}
             )
 
         return super(ContributorSerializer, self).create(validated_data)
@@ -365,9 +339,7 @@ class ContributorSerializer(ValidatedModelSerializer):
         # stop update if compo is locked down
         if instance.entry.competition.is_locked:
             raise ValidationError(
-                {
-                    "error": "This competition is currently locked down pending stage show, and no edits are permitted."
-                }
+                {"error": "This competition is currently locked down pending stage show, and no edits are permitted."}
             )
 
         return super(self, CompetitionSerializer).update(instance, validated_data)

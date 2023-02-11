@@ -38,9 +38,7 @@ class MatchRequestViewTest(TestCase):
 
         # create genres
         self.gameGenre = Genre.objects.create(category=GENRE_CATEGORY_GAME, name="Game")
-        self.creativeGenre = Genre.objects.create(
-            category=GENRE_CATEGORY_CREATIVE, name="Programming"
-        )
+        self.creativeGenre = Genre.objects.create(category=GENRE_CATEGORY_CREATIVE, name="Programming")
 
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
 
@@ -113,9 +111,7 @@ class MatchRequestViewTest(TestCase):
         self.assertEqual(response.data["count"], 3)
 
         for mr in response.data["results"]:
-            self.assertTrue(
-                mr["author"]["uuid"] == self.user1.uuid or mr["active"] is True
-            )
+            self.assertTrue(mr["author"]["uuid"] == self.user1.uuid or mr["active"] is True)
 
     def test_recommendations(self):
         response = self.client.get("/api/matchmaking/recommended/")

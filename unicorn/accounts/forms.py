@@ -12,9 +12,7 @@ consent_duration = timedelta(seconds=settings.CONSENT_DURATION)
 
 
 class LoginForm(AuthenticationForm, BootstrapMixin):
-    remember = forms.BooleanField(
-        label="Remember me", required=False, help_text=_(f"{remember_time.days} days")
-    )
+    remember = forms.BooleanField(label="Remember me", required=False, help_text=_(f"{remember_time.days} days"))
     challenge = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, **kwargs):
@@ -40,9 +38,7 @@ class LoginForm(AuthenticationForm, BootstrapMixin):
         )
 
         self.fields["remember"].widget.attrs.update(
-            {
-                "class": "form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-            }
+            {"class": "form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"}
         )
 
 

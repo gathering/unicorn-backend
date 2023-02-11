@@ -36,9 +36,7 @@ class GeekEventsSSOAuth(BaseAuth):
             "token": response.get("token"),
             "event_id": self.setting("GEEKEVENTS_EVENT_ID"),
         }
-        userinfo = self.request(
-            f"{GE_SSO_BASE_URL}/extended-userinfo/", method="POST", data=credentials
-        ).json()
+        userinfo = self.request(f"{GE_SSO_BASE_URL}/extended-userinfo/", method="POST", data=credentials).json()
 
         # geekevents gives a bool on the status of the request, this is false if
         # token/timestamp is expired (although this seems to never happen)
@@ -58,9 +56,7 @@ class GeekEventsSSOAuth(BaseAuth):
 
     def auth_url(self):
         """Build and return complete URL."""
-        redirect_to = self.strategy.absolute_uri(
-            reverse("social:complete", kwargs={"backend": "geekevents"})
-        )
+        redirect_to = self.strategy.absolute_uri(reverse("social:complete", kwargs={"backend": "geekevents"}))
 
         return f"{GE_SSO_BASE_URL}/?next={redirect_to}"
 

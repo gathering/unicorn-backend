@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 
 import pytz
+from accounts.models import User
 from competitions.constants import *  # noqa: F403
 from competitions.models import Competition, Genre
 from django.test import TestCase
 from matchmaking.constants import *  # noqa: F403
 from matchmaking.models import MatchRequest
-from accounts.models import User
 
 
 class MatchRequestModelTestCase(TestCase):

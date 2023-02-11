@@ -36,9 +36,7 @@ def get_serializer_for_model(model, prefix=""):
     Dynamically resolve and return the appropriate serializer for a model.
     """
     app_name, model_name = model._meta.label.split(".")
-    serializer_name = "{}.api.serializers.{}{}Serializer".format(
-        app_name, prefix, model_name
-    )
+    serializer_name = "{}.api.serializers.{}{}Serializer".format(app_name, prefix, model_name)
     try:
         return dynamic_import(serializer_name)
     except AttributeError:
@@ -106,9 +104,7 @@ class ContentTypeField(Field):
     def to_internal_value(self, data):
         app_label, model = data.split(".")
         try:
-            return ContentType.objects.get_by_natural_key(
-                app_label=app_label, model=model
-            )
+            return ContentType.objects.get_by_natural_key(app_label=app_label, model=model)
         except ContentType.DoesNotExist:
             raise ValidationError("Invalid content type")
 
@@ -186,10 +182,7 @@ class ValidatedModelSerializer(ModelSerializer):
         return "full"
 
     def get_permissions(self, obj) -> list:
-        return [
-            f"{obj._meta.app_label}.{p}"
-            for p in list(get_perms(self.context["request"].user, obj))
-        ]
+        return [f"{obj._meta.app_label}.{p}" for p in list(get_perms(self.context["request"].user, obj))]
 
 
 class WritableNestedSerializer(ModelSerializer):

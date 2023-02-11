@@ -12,8 +12,7 @@ class EventTest(TestCase):
             name="Test Event Å 42",
             location="SüperHœllen",
             start_date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc),
-            end_date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
-            + datetime.timedelta(days=2),
+            end_date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc) + datetime.timedelta(days=2),
         )
 
     def test_string_cast(self):

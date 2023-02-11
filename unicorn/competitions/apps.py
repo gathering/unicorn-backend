@@ -6,9 +6,7 @@ def create_permission_groups(**kwargs):
 
     from .constants import GENRE_CATEGORY_CHOICES
 
-    p = Permission.objects.get(
-        content_type__app_label="competitions", codename="add_competition"
-    )
+    p = Permission.objects.get(content_type__app_label="competitions", codename="add_competition")
     for category in GENRE_CATEGORY_CHOICES:
         g = Group.objects.get_or_create(name="p-compoadmin-{}".format(str(category[0])))
         if g[1]:

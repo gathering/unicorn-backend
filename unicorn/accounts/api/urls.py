@@ -25,5 +25,5 @@ app_name = "accounts-api"
 urlpatterns = [
     path("search/", views.SearchView.as_view(), name="accounts-api-search"),
     path("mypermissions/", views.MyGlobalPermissionsView.as_view(), name="accouts-mypermissions"),
-    path("", include(router.urls))
+    path("", include(router.urls)),
 ]

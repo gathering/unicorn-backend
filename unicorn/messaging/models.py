@@ -18,12 +18,8 @@ class Thread(CreatedUpdatedModel, models.Model):
 
 
 class ThreadMember(models.Model):
-    thread = models.ForeignKey(
-        verbose_name=_("thread"), to="Thread", on_delete=models.CASCADE
-    )
-    user = models.ForeignKey(
-        verbose_name=_("user"), to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
+    thread = models.ForeignKey(verbose_name=_("thread"), to="Thread", on_delete=models.CASCADE)
+    user = models.ForeignKey(verbose_name=_("user"), to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     seen = models.DateTimeField(verbose_name=_("last seen"))
     favorite = models.BooleanField(verbose_name=_("favorite"))
 

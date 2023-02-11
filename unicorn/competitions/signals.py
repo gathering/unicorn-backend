@@ -45,9 +45,7 @@ def add_competition_view_published(sender, instance, created, **kwargs):
 def assure_compoadmin_permissions(sender, instance, created, **kwargs):
     if created:
         try:
-            group = Group.objects.get(
-                name="p-compoadmin-{}".format(str(instance.genre.category))
-            )
+            group = Group.objects.get(name="p-compoadmin-{}".format(str(instance.genre.category)))
             assign_perm("view_competition", group, instance)
             assign_perm("change_competition", group, instance)
             assign_perm("delete_competition", group, instance)
@@ -59,9 +57,7 @@ def assure_compoadmin_permissions(sender, instance, created, **kwargs):
 def assure_compoadmin_entry_permissions(sender, instance, created, **kwargs):
     if created:
         try:
-            group = Group.objects.get(
-                name="p-compoadmin-{}".format(str(instance.competition.genre.category))
-            )
+            group = Group.objects.get(name="p-compoadmin-{}".format(str(instance.competition.genre.category)))
             assign_perm("view_entry", group, instance)
             assign_perm("change_entry", group, instance)
             assign_perm("delete_entry", group, instance)

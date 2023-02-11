@@ -41,27 +41,17 @@ class RecommendedListView(generics.ListAPIView):
         qs = self.get_queryset()
 
         # get competitions where user have active MRs and is not a contributor themselves
-        competitions = Competition.objects.filter(
-            matchrequests__author=request.user
-        ).filter(~Q(entries__contributors=request.user))
+        competitions = Competition.objects.filter(matchrequests__author=request.user).filter(
+            ~Q(entries__contributors=request.user)
+        )
 
         # filter MRs to only find active ones from other users matching competitions above
-        qs = (
-            qs.filter(active=True)
-            .filter(~Q(author=request.user))
-            .filter(competition__in=competitions)
-        )
+        qs = qs.filter(active=True).filter(~Q(author=request.user)).filter(competition__in=competitions)
 
         # exclude all MRs with same looking_for and rank +/- 1
         for mr in MatchRequest.objects.filter(author=request.user).filter(active=True):
-            qs = (
-                qs.exclude(looking_for=mr.looking_for)
-                .exclude(rank__lt=mr.rank - 1)
-                .exclude(rank__gt=mr.rank + 1)
-            )
+            qs = qs.exclude(looking_for=mr.looking_for).exclude(rank__lt=mr.rank - 1).exclude(rank__gt=mr.rank + 1)
 
         # pass QuerySet to serializer and return data to client
-        serializer = serializers.MatchRequestSerializer(
-            qs, many=True, context={"request": request}
-        )
+        serializer = serializers.MatchRequestSerializer(qs, many=True, context={"request": request})
         return Response(serializer.data)

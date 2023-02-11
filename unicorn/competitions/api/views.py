@@ -119,9 +119,7 @@ class DownloadViewSet(ReadOnlyModelViewSet):
                 continue
 
             # build some names
-            title = "".join(
-                char for char in entry.title if char.isalnum() or char == " "
-            )
+            title = "".join(char for char in entry.title if char.isalnum() or char == " ")
             owner_obj = Contributor.objects.get(entry=entry, is_owner=True)
             name = owner_obj.user.display_name
             owner = "".join(char for char in name if char.isalnum() or char == " ")
@@ -201,9 +199,7 @@ class ResultsViewSet(ModelViewSet):
         .prefetch_related(
             Prefetch(
                 "entries",
-                queryset=Entry.objects.filter(status=ENTRY_STATUS_QUALIFIED).order_by(
-                    "-score", "order"
-                ),
+                queryset=Entry.objects.filter(status=ENTRY_STATUS_QUALIFIED).order_by("-score", "order"),
             )
         )
     )

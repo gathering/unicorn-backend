@@ -53,9 +53,7 @@ class NullableModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         if hasattr(self, "_choices"):
             return self._choices
         # Prepend the null choice to the queryset iterator
-        return itertools.chain(
-            [(self.null_value, self.null_label)], self.iterator(self)
-        )
+        return itertools.chain([(self.null_value, self.null_label)], self.iterator(self))
 
     choices = property(_get_choices, forms.ChoiceField._set_choices)
 

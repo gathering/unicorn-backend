@@ -9,9 +9,7 @@ from utilities.api import ChoiceField, WritableNestedSerializer
 
 
 class NestedGenreSerializer(WritableNestedSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="competitions-api:genre-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="competitions-api:genre-detail")
     category = ChoiceField(choices=GENRE_CATEGORY_CHOICES)
 
     class Meta:
@@ -26,9 +24,7 @@ class NestedGenreSerializer(WritableNestedSerializer):
 
 
 class NestedCompetitionSerializer(WritableNestedSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="competitions-api:competition-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="competitions-api:competition-detail")
 
     class Meta:
         model = Competition
@@ -42,9 +38,7 @@ class NestedCompetitionSerializer(WritableNestedSerializer):
 
 
 class NestedEntrySerializer(WritableNestedSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="competitions-api:entry-detail"
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="competitions-api:entry-detail")
     is_contributor = serializers.SerializerMethodField()
 
     class Meta:

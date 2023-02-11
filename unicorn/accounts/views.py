@@ -35,7 +35,9 @@ class LoginView(View):
             return HttpResponseRedirect(redirect_to)
 
         form = LoginForm(request)
-        return render(request, self.template_name, {"form": form, "provider": provider, "next": request.GET.get("next", "")})
+        return render(
+            request, self.template_name, {"form": form, "provider": provider, "next": request.GET.get("next", "")}
+        )
 
     def post(self, request, **kwargs):
         form = LoginForm(request, data=request.POST)
