@@ -1,15 +1,43 @@
-FROM python:3.10-slim
+ARG WORKDIR="/app"
 
-WORKDIR /unicorn
-RUN pip install pipenv
+FROM python:3.10-alpine as base
 
-COPY Pipfile.lock .
-COPY Pipfile .
+# Remember to also update in pyproject.toml
+ENV POETRY_VERSION=1.3.2
 
-ENV PYTHON=python
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONFAULTHANDLER 1
 
-RUN pipenv install --system --deploy --ignore-pipfile
+
+FROM base as deps
+
+ARG WORKDIR
+WORKDIR ${WORKDIR}
+
+# We need a compiler and some stuff
+RUN apk add build-base libffi-dev \
+    && rm -rf /var/cache/apk/*
+
+# Install poetry separated from system interpreter
+RUN pip install -U pip setuptools \
+    && pip install poetry==${POETRY_VERSION}
+
+
+# Install dependencies
+COPY poetry.lock pyproject.toml ./
+RUN poetry config virtualenvs.in-project true
+RUN poetry install --only main
+
+
+FROM base
+
+ARG WORKDIR
+WORKDIR ${WORKDIR}
+
+COPY --from=deps ${WORKDIR}/.venv ${WORKDIR}/.venv
+ENV PATH="${WORKDIR}/.venv/bin:$PATH"
 
 COPY . .
 
-CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 6 --chdir unicorn/ --access-logfile '-' --error-logfile '-'
+EXPOSE 80
+CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 6 --chdir app/ --access-logfile '-' --error-logfile '-'
