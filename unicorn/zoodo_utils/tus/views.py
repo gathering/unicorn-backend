@@ -114,7 +114,8 @@ class TusUpload(APIView):
         response.status_code = 204
         return response
 
-    def post(self, request, *args, **kwargs):
+    # TODO: this function needs refactoring to be less complex
+    def post(self, request, *args, **kwargs):  # noqa: C901
         """
 
         :param request:

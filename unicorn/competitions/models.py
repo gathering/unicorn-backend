@@ -230,7 +230,8 @@ class Competition(CreatedUpdatedModel, models.Model):
     def next_state(self):
         return self.compute_next_state()
 
-    def compute_next_state(self, state=None):
+    # TODO: this function needs refactoring to be less complex
+    def compute_next_state(self, state=None):  # noqa: C901
         state = state or self.state
 
         if state == COMPETITION_STATE_NEW:
@@ -278,7 +279,8 @@ class Competition(CreatedUpdatedModel, models.Model):
         else:
             return COMPETITION_STATE_FIN
 
-    def clean(self):
+    # TODO: this function needs refactoring to be less complex
+    def clean(self):  # noqa: C901
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
         errors = {}
 
