@@ -1,0 +1,42 @@
+[
+  {
+    "model": "competitions.genre",
+    "pk": 1,
+    "fields": { "category": "creative", "name": "Demo" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 2,
+    "fields": { "category": "creative", "name": "Foto" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 3,
+    "fields": { "category": "creative", "name": "Grafikk" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 4,
+    "fields": { "category": "creative", "name": "Musikk" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 5,
+    "fields": { "category": "creative", "name": "Programmering" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 6,
+    "fields": { "category": "creative", "name": "Spillutvikling" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 7,
+    "fields": { "category": "creative", "name": "Video" }
+  },
+  {
+    "model": "competitions.genre",
+    "pk": 8,
+    "fields": { "category": "game", "name": "Game" }
+  }
+]

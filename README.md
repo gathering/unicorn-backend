@@ -12,6 +12,8 @@ When running for the first time, or after creating migrations, remember to also 
 
 Create first local superuser: `docker-compose exec web python /unicorn/unicorn/manage.py createsuperuser`
 
+Optionally, import seed data by running `docker-compose exec web python /unicorn/unicorn/manage.py loaddata unicorn/seed.json`
+
 
 ## Running locally
 
