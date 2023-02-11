@@ -17,7 +17,8 @@ def add_competition_view_published(sender, instance, created, **kwargs):
     anon = Group.objects.get(name="p-anonymous")
     crew = Group.objects.get(name="p-crew")
 
-    # if visibility is set to hidden, we remove crew and anon permissions regardless if the action is publish or unpublish
+    # if visibility is set to hidden, we remove crew and anon permissions
+    # regardless if the action is publish or unpublish
     if instance.visibility == COMPETITION_VISIBILITY_HIDDEN:
         remove_perm("view_competition", anon, instance)
         remove_perm("view_competition", crew, instance)
