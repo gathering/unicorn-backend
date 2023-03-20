@@ -194,7 +194,6 @@ TEMPLATES = [
 
 SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ["next", "login_challenge"]
 SOCIAL_AUTH_PIPELINE = (
-    "accounts.pipeline.authenticate_wannabe",
     "social_core.pipeline.social_auth.social_details",
     "social_core.pipeline.social_auth.social_uid",
     "accounts.pipeline.annotate_steam",
