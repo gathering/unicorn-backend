@@ -40,4 +40,4 @@ ENV PATH="${WORKDIR}/.venv/bin:$PATH"
 COPY . .
 
 EXPOSE 80
-CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 6 --chdir app/ --access-logfile '-' --error-logfile '-'
+CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 6 --access-logfile '-' --error-logfile '-'
