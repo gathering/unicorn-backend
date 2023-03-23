@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
     command: python unicorn/manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/unicorn
+      - ./unicorn:/app/unicorn
     ports:
       - 8000:8000
     depends_on:
