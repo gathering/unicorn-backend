@@ -33,6 +33,19 @@ class UserViewSet(ModelViewSet):
 
         return Response(serializer.data)
 
+    @extend_schema(responses=ListSerializer(child=CharField()))
+    @action(detail=True, methods=["get"])
+    def permissions(self, request, pk=None):
+        user = self.get_object()
+        if not user:
+            return Response(status=404, data="Not found")
+
+        user_perms = user.get_all_permissions()
+        anon_perms = User.get_anonymous().get_all_permissions()
+        perms = set.union(user_perms, anon_perms)
+
+        return Response(sorted(perms))
+
 
 class UserFieldChoicesViewSet(FieldChoicesViewSet):
     fields = ((User, ["display_name_format"]), (User, ["role"]), (User, ["gender"]))
