@@ -198,7 +198,7 @@ class TusUpload(APIView):
             return response
 
         try:
-            f = os.fdopen(os.open(os.path.join(self.TUS_UPLOAD_DIR, resource_id), "wb"))
+            f = os.fdopen(os.open(os.path.join(self.TUS_UPLOAD_DIR, resource_id), os.O_WRONLY | os.O_CREAT), "wb")
             f.seek(file_size)
             f.write(b"\0")
             f.close()
@@ -272,9 +272,9 @@ class TusUpload(APIView):
         # )
 
         try:
-            file = os.fdopen(os.open(upload_file_path, "r+b"))
+            file = os.fdopen(os.open(upload_file_path, os.O_RDWR), "r+b")
         except IOError:
-            file = os.fdopen(os.open(upload_file_path, "wb"))
+            file = os.fdopen(os.open(upload_file_path, os.O_RDWR | os.O_CREAT), "wb")
         finally:
             file.seek(file_offset)
             file.write(request.body)
