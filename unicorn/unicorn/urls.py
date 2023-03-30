@@ -10,7 +10,7 @@ from drf_spectacular.views import (
 )
 from zoodo_utils.tus.views import TusUpload
 
-from unicorn.views import APIRootView
+from unicorn.views import APIHealthView, APIRootView
 
 _patterns = [
     # Redirect random requests to API
@@ -21,6 +21,7 @@ _patterns = [
     ),
     # API
     path("api/", APIRootView.as_view(), name="api-root"),
+    path("api/health/", APIHealthView.as_view(), name="api-health"),
     path("api/accounts/", include("accounts.api.urls")),
     path("api/competitions/", include("competitions.api.urls")),
     path("api/core/", include("core.api.urls")),

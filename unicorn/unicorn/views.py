@@ -11,7 +11,6 @@ class APIRootView(APIView):
         return "API Root"
 
     def get(self, request, format=None):
-
         # List all applications available for everyone, including anonymous users
         data = {
             "competitions": reverse("competitions-api:api-root", request=request, format=format),
@@ -27,3 +26,13 @@ class APIRootView(APIView):
 
         # the end
         return Response(data)
+
+
+class APIHealthView(APIView):
+    _ignore_model_permissions = True
+
+    def get_view_name(self):
+        return "Health"
+
+    def get(self, request, format=None):
+        return Response("ok")
