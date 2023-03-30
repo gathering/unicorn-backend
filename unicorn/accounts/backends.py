@@ -2,7 +2,8 @@ from django.urls import reverse
 from social_core.backends.base import BaseAuth
 from social_core.backends.keycloak import KeycloakOAuth2
 
-from .constants import USER_ROLE_PARTICIPANT
+from .constants import USER_ROLE_MORTAL, USER_ROLE_PARTICIPANT
+from .exceptions import AuthRejectedNoTicket
 
 GE_SSO_BASE_URL = "https://www.geekevents.org/sso"
 
@@ -43,6 +44,9 @@ class GeekEventsSSOAuth(BaseAuth):
         if not userinfo.get("status"):
             return {}
 
+        if self.setting("REQUIRE_TICKET") and not userinfo.get("ticket_valid"):
+            raise AuthRejectedNoTicket("geekevents")
+
         return {
             "username": userinfo.get("username"),
             "email": userinfo.get("email"),
@@ -51,7 +55,9 @@ class GeekEventsSSOAuth(BaseAuth):
             "birth": userinfo.get("birth"),
             "phone_number": userinfo.get("phone"),
             "gender": GE_GENDER_MAP.get(userinfo.get("gender"), "other"),
-            "role": USER_ROLE_PARTICIPANT,
+            "role": USER_ROLE_PARTICIPANT if userinfo.get("ticket_valid") else USER_ROLE_MORTAL,
+            "row": userinfo.get("ticket_row") or None,
+            "seat": userinfo.get("ticket_seat") or None,
         }
 
     def auth_url(self):

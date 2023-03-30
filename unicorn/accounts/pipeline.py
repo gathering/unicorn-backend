@@ -10,7 +10,7 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
     if user:
         return {"is_new": False}
 
-    if backend.name not in ["keycloak-crew", "keycloak-participant"]:
+    if backend.name not in ["geekevents", "keycloak-crew", "keycloak-participant"]:
         raise AuthRejected(backend.name)
 
     fields = dict((name, kwargs.get(name, details.get(name))) for name in backend.setting("USER_FIELDS", USER_FIELDS))

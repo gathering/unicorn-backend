@@ -9,3 +9,10 @@ class AuthRejected(AuthException):
 
     def __str__(self):
         return f"Backend '{self.backend_name}' is only available for existing users."
+
+
+class AuthRejectedNoTicket(AuthException):
+    """Backend reports the user to not have a valid ticket"""
+
+    def __str__(self):
+        return "Sorry, your account does not have a valid ticket for this event."
