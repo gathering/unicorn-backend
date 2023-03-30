@@ -5,7 +5,9 @@
     <main class="flex items-center justify-center py-12 px-4 laptop:px-6 desktop:px-8">
         <div class="max-w-md w-full">
             <header class="mb-8">
-                <img class="mx-auto h-24 w-auto" src="{% static 'img/tg_logo_liten.png' %}" alt="" />
+                <a href="/">
+                    <img class="mx-auto h-24 w-auto" src="{% static 'img/tg_logo_liten.png' %}" alt="" />
+                </a>
                 <h1 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900" {% if provider %}aria-label="Sign in to your account using your {{ provider }} credentials"{% endif %}>
                     Sign in to your account
                 </h1>
