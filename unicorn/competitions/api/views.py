@@ -141,7 +141,7 @@ class DownloadViewSet(ReadOnlyModelViewSet):
 
         zipObj.close()
 
-        shutil.move(zip_path, f"/unicorn/unicorn/media/{compo_name}.zip")
+        shutil.move(zip_path, f"/app/unicorn/media/{compo_name}.zip")
         return HttpResponseRedirect(redirect_to=f"/media/{compo_name}.zip")
 
 
