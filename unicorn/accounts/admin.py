@@ -15,6 +15,7 @@ class ExtendedUserAdmin(UserAdmin):
         "accepted_location",
         "checked_in",
         "crew",
+        "ticket_period",
         "row",
         "seat",
         "is_superuser",
@@ -69,6 +70,7 @@ class ExtendedUserAdmin(UserAdmin):
             {
                 "fields": (
                     "display_name_format",
+                    "ticket_period",
                     ("row", "seat"),
                     "checked_in",
                     "crew",

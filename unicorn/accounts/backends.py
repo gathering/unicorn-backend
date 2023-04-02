@@ -47,6 +47,11 @@ class GeekEventsSSOAuth(BaseAuth):
         if self.setting("REQUIRE_TICKET") and not userinfo.get("ticket_valid"):
             raise AuthRejectedNoTicket("geekevents")
 
+        row = userinfo.get("ticket_row")
+        ticket_period = None
+        if row and " " in row:
+            ticket_period, row = row.split()
+
         return {
             "username": userinfo.get("username"),
             "email": userinfo.get("email"),
@@ -56,7 +61,8 @@ class GeekEventsSSOAuth(BaseAuth):
             "phone_number": userinfo.get("phone"),
             "gender": GE_GENDER_MAP.get(userinfo.get("gender"), "other"),
             "role": USER_ROLE_PARTICIPANT if userinfo.get("ticket_valid") else USER_ROLE_MORTAL,
-            "row": userinfo.get("ticket_row") or None,
+            "ticket_period": ticket_period,
+            "row": row,
             "seat": userinfo.get("ticket_seat") or None,
         }
 

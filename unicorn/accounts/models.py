@@ -75,6 +75,7 @@ class User(AbstractUser, GuardianUserMixin):
         help_text=_("User is approved for interacting with PII data on other accounts."),
     )
     accepted_location = models.BooleanField(verbose_name=_("Has accepted location tracking"), default=False)
+    ticket_period = models.CharField(max_length=20, blank=True, null=True, default=None)
     row = models.PositiveSmallIntegerField(
         verbose_name=_("row"), null=True, blank=True, validators=[MinValueValidator(1)]
     )
