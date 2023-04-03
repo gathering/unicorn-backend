@@ -1,7 +1,5 @@
 import os
 
-import dj_database_url
-
 #########################
 #                       #
 #   Required settings   #
@@ -16,28 +14,19 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://*,https://*").split(",")
 
 # PostgreSQL database configuration.
-if os.getenv("DATABASE_URL"):
-    DATABASE = dj_database_url.parse(os.getenv("DATABASE_URL"))
-    if not DATABASE.get("NAME"):
-        DATABASE["NAME"] = "unicorn"
-else:
-    DATABASE = {
-        "NAME": os.getenv("DATABASE_NAME", "unicorn"),  # Database name
-        "USER": os.getenv("DATABASE_USER", ""),  # PostgreSQL username
-        "PASSWORD": os.getenv("DATABASE_PASSWORD", ""),  # PostgreSQL password
-        "HOST": os.getenv("DATABASE_HOST", "localhost"),  # Database server
-        "PORT": os.getenv("DATABASE_PORT", ""),  # Database port (leave blank for default)
-    }
+DATABASE = {
+    "NAME": os.getenv("DATABASE_NAME", "unicorn"),  # Database name
+    "USER": os.getenv("DATABASE_USER", ""),  # PostgreSQL username
+    "PASSWORD": os.getenv("DATABASE_PASSWORD", ""),  # PostgreSQL password
+    "HOST": os.getenv("DATABASE_HOST", "localhost"),  # Database server
+    "PORT": os.getenv("DATABASE_PORT", ""),  # Database port (leave blank for default)
+}
 
 # This key is used for secure generation of random numbers and strings. It must never be exposed outside of this file.
 # For optimal security, SECRET_KEY should be at least 50 characters in length and contain a mix of letters, numbers, and
 # symbols. Unicorn will not run without this defined. For more information, see
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECRET_KEY
 SECRET_KEY = os.getenv("SECRET_KEY", "")
-
-# Private DSN for Sentry
-# Should be either False to disable or a string with the actual DSN
-SENTRY_DSN = os.getenv("SENTRY_DSN", False)
 
 
 #########################

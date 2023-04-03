@@ -3,11 +3,9 @@ import socket
 import sys
 
 import environ
-import sentry_sdk
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 from django.core.exceptions import ImproperlyConfigured
-from sentry_sdk.integrations.django import DjangoIntegration
 
 try:
     from unicorn import configuration
@@ -33,13 +31,12 @@ else:
     environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Import required configuration parameters
-ALLOWED_HOSTS = CSRF_TRUSTED_ORIGINS = DATABASE = SECRET_KEY = SENTRY_DSN = None
+ALLOWED_HOSTS = CSRF_TRUSTED_ORIGINS = DATABASE = SECRET_KEY = None
 for setting in [
     "ALLOWED_HOSTS",
     "CSRF_TRUSTED_ORIGINS",
     "DATABASE",
     "SECRET_KEY",
-    "SENTRY_DSN",
 ]:
     try:
         globals()[setting] = getattr(configuration, setting)
@@ -149,9 +146,6 @@ INSTALLED_APPS = [
     "core",
     "auditlog",
 ]
-
-if SENTRY_DSN is not False:
-    INSTALLED_APPS = ["raven.contrib.django.raven_compat"] + INSTALLED_APPS
 
 # Middleware
 MIDDLEWARE = [
@@ -373,15 +367,6 @@ WANNABE_API_KEY = ""
 
 
 TUS_UPLOAD_DIR = BASE_DIR + "/upload/"
-
-# Sentry configuration
-sentry_sdk.init(
-    dsn=SENTRY_DSN,
-    integrations=[DjangoIntegration()],
-    environment="development" if "dev" in VERSION else "production",
-    release=VERSION,
-    send_default_pii=True,
-)
 
 
 try:
