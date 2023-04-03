@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     "tailwind",
     "theme",
     "core",
+    "auditlog",
 ]
 
 if SENTRY_DSN is not False:
@@ -168,6 +169,7 @@ MIDDLEWARE = [
     "utilities.middleware.LoginRequiredMiddleware",
     "utilities.middleware.APIVersionMiddleware",
     "accounts.middleware.CustomSocialAuthExceptionMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
 ]
 
 ROOT_URLCONF = "unicorn.urls"

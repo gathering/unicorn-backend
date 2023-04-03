@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pytz
 from accounts.constants import USER_ROLE_JURY
+from auditlog.registry import auditlog
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -361,6 +362,9 @@ class Competition(CreatedUpdatedModel, models.Model):
 
         # run parent logic
         super(Competition, self).save(*args, **kwargs)
+
+
+auditlog.register(Competition)
 
 
 class Entry(CreatedUpdatedModel, models.Model):
