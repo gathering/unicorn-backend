@@ -1,9 +1,19 @@
 from django.contrib import admin, messages
+from django.contrib.admin import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.sessions.models import Session
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy
 
 from .models import AutoCrew, User
+
+
+@admin.register(Session)
+class SessionAdmin(ModelAdmin):
+    def _session_data(self, obj):
+        return obj.get_decoded()
+
+    list_display = ["session_key", "_session_data", "expire_date"]
 
 
 @admin.register(User)
