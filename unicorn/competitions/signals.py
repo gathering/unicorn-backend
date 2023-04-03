@@ -1,7 +1,9 @@
 from competitions.constants import (
+    COMPETITION_STATE_VOTE,
     COMPETITION_VISIBILITY_CREW,
     COMPETITION_VISIBILITY_HIDDEN,
     COMPETITION_VISIBILITY_PUBLIC,
+    ENTRY_STATUS_QUALIFIED,
 )
 from competitions.models import Competition, Contributor, Entry, File, Vote
 from django.contrib.auth.models import Group
@@ -153,3 +155,20 @@ def add_vote_object_permissions(sender, instance, **kwargs):
 @receiver(post_save, sender=Vote)
 def recalculate_entry_score(sender, instance, **kwargs):
     instance.entry.update_score()
+
+
+@receiver(post_save, sender=Competition)
+def update_entry_permissions_for_voting(instance: Competition, **kwargs):
+    if not instance.published:
+        return
+
+    g = Group.objects.get(name="p-participant")
+    entries = instance.entries.filter(status=ENTRY_STATUS_QUALIFIED)
+
+    if entries.exists():
+        if instance.state == COMPETITION_STATE_VOTE:
+            for entry in entries:
+                assign_perm("view_entry", g, entry)
+        else:
+            for entry in entries:
+                remove_perm("view_entry", g, entry)
