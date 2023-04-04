@@ -12,9 +12,6 @@ class MatchmakingRootView(routers.APIRootView):
 router = routers.DefaultRouter()
 router.APIRootView = MatchmakingRootView
 
-# Field choices
-router.register(r"_choices", views.MatchMakingFieldChoicesViewSet, basename="field-choice")
-
 # Matchmaking Requests
 router.register(r"requests", views.MatchRequestViewSet)
 

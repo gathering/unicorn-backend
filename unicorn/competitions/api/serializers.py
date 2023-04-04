@@ -11,6 +11,7 @@ from competitions.constants import (
     GENRE_CATEGORY_CHOICES,
 )
 from competitions.models import Competition, Contributor, Entry, File, Genre, Vote
+from drf_spectacular.utils import extend_schema_field
 from guardian.shortcuts import assign_perm
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -268,6 +269,7 @@ class EntrySerializer(ValidatedModelSerializer):
         # finally check if we are the owner
         return self.context["request"].user.pk == owner["uuid"]
 
+    @extend_schema_field(NestedUserSerializer)
     def get_owner(self, obj):
         try:
             contributor = Contributor.objects.get(is_owner=True, entry_id=obj.pk)

@@ -16,9 +16,6 @@ class UsersRootView(routers.APIRootView):
 router = routers.DefaultRouter()
 router.APIRootView = UsersRootView
 
-# Field choices
-router.register(r"_choices", views.UserFieldChoicesViewSet, basename="field-choice")
-
 router.register(r"users", views.UserViewSet)
 
 app_name = "accounts-api"

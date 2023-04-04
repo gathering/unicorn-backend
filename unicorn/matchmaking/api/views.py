@@ -3,16 +3,9 @@ from django.db.models import Q
 from matchmaking.models import MatchRequest
 from rest_framework import generics
 from rest_framework.response import Response
-from utilities.api import FieldChoicesViewSet, ModelViewSet
+from utilities.api import ModelViewSet
 
 from . import serializers
-
-
-#
-# Field Choices
-#
-class MatchMakingFieldChoicesViewSet(FieldChoicesViewSet):
-    fields = ((MatchRequest, ["looking_for"]), (MatchRequest, ["rank"]))
 
 
 #

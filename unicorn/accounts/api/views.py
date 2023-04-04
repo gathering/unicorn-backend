@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import CharField, ListSerializer
 from rest_framework.views import APIView
 from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
-from utilities.api import FieldChoicesViewSet, ModelViewSet
+from utilities.api import ModelViewSet
 from utilities.permissions import IsAuthenticatedAndNotAnon, StandardObjectPermissions
 
 from ..constants import USER_ROLE_ANON
@@ -45,10 +45,6 @@ class UserViewSet(ModelViewSet):
         perms = set.union(user_perms, anon_perms)
 
         return Response(sorted(perms))
-
-
-class UserFieldChoicesViewSet(FieldChoicesViewSet):
-    fields = ((User, ["display_name_format"]), (User, ["role"]), (User, ["gender"]))
 
 
 class SearchView(ListAPIView):

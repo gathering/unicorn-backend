@@ -11,9 +11,6 @@ class CompetitionsRootView(routers.APIRootView):
 router = routers.DefaultRouter()
 router.APIRootView = CompetitionsRootView
 
-# Field choices
-router.register(r"_choices", views.CompetitionsFieldChoicesViewSet, basename="field-choice")
-
 # Genres
 router.register(r"genres", views.GenreViewSet)
 

@@ -3,33 +3,19 @@ import shutil
 from zipfile import ZipFile
 
 from competitions import filters
-from competitions.models import Competition, Contributor, Entry, File, Genre, Vote
+from competitions.models import Competition, Contributor, Entry, Genre, Vote
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from utilities.api import FieldChoicesViewSet, ModelViewSet
+from utilities.api import ModelViewSet
 
 from unicorn.api import MethodNotAllowed, PassthroughRenderer, ServerError
 
 from ..constants import ENTRY_STATUS_QUALIFIED, GENRE_CATEGORY_CREATIVE
 from . import serializers
-
-#
-# Field choices
-#
-
-
-class CompetitionsFieldChoicesViewSet(FieldChoicesViewSet):
-    fields = (
-        (Genre, ["category"]),
-        (Competition, ["state"]),
-        (Entry, ["status"]),
-        (File, ["status"]),
-    )
-
 
 #
 # Genres

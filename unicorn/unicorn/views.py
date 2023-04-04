@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
@@ -10,6 +11,7 @@ class APIRootView(APIView):
     def get_view_name(self):
         return "API Root"
 
+    @extend_schema(exclude=True)
     def get(self, request, format=None):
         # List all applications available for everyone, including anonymous users
         data = {
@@ -34,5 +36,6 @@ class APIHealthView(APIView):
     def get_view_name(self):
         return "Health"
 
+    @extend_schema(exclude=True)
     def get(self, request, format=None):
         return Response("ok")

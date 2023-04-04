@@ -66,31 +66,76 @@ class IsAuthenticatedOrLoginNotRequired(BasePermission):
 
 class ChoiceField(Field):
     """
-    Represent a ChoiceField as {'value': <DB value>, 'label': <string>}.
+    Represent a ChoiceField as {'value': <DB value>, 'label': <string>}. Accepts a single value on write.
+    :param choices: An iterable of choices in the form (value, key).
+    :param allow_blank: Allow blank values in addition to the listed choices.
     """
 
-    def __init__(self, choices, **kwargs):
+    def __init__(self, choices, allow_blank=False, **kwargs):
+        self.choiceset = choices
+        self.allow_blank = allow_blank
         self._choices = dict()
+
+        # Unpack grouped choices
         for k, v in choices:
-            # Unpack grouped choices
             if type(v) in [list, tuple]:
                 for k2, v2 in v:
                     self._choices[k2] = v2
             else:
                 self._choices[k] = v
-        super(ChoiceField, self).__init__(**kwargs)
+
+        super().__init__(**kwargs)
+
+    def validate_empty_values(self, data):
+        # Convert null to an empty string unless allow_null == True
+        if data is None:
+            if self.allow_null:
+                return True, None
+            else:
+                data = ""
+        return super().validate_empty_values(data)
 
     def to_representation(self, obj):
-        return {"value": obj, "label": self._choices[obj]}
+        if obj == "":
+            return None
+        return {
+            "value": obj,
+            "label": self._choices[obj],
+        }
 
     def to_internal_value(self, data):
-        # Hotwiring boolean values
+        if data == "":
+            if self.allow_blank:
+                return data
+            raise ValidationError("This field may not be blank.")
+
+        # Provide an explicit error message if the request is trying to write a dict or list
+        if isinstance(data, (dict, list)):
+            raise ValidationError('Value must be passed directly (e.g. "foo": 123); do not use a dictionary or list.')
+
+        # Check for string representations of boolean/integer values
         if hasattr(data, "lower"):
             if data.lower() == "true":
-                return True
-            if data.lower() == "false":
-                return False
-        return data
+                data = True
+            elif data.lower() == "false":
+                data = False
+            else:
+                try:
+                    data = int(data)
+                except ValueError:
+                    pass
+
+        try:
+            if data in self._choices:
+                return data
+        except TypeError:  # Input is an unhashable type
+            pass
+
+        raise ValidationError(f"{data} is not a valid choice.")
+
+    @property
+    def choices(self):
+        return self._choices
 
 
 class ContentTypeField(Field):
@@ -144,6 +189,7 @@ class SerializedPKRelatedField(PrimaryKeyRelatedField):
 #
 # Serializers
 #
+
 
 # TODO: We should probably take a fresh look at exactly what we're doing with this. There might be a more elegant
 # way to enforce model validation on the serializer.
@@ -220,7 +266,6 @@ class ModelViewSet(_ModelViewSet):
     """
 
     def get_serializer(self, *args, **kwargs):
-
         # If a list of objects has been provided, initialize the serializer with many=True
         if isinstance(kwargs.get("data", {}), list):
             kwargs["many"] = True
