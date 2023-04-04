@@ -1,5 +1,6 @@
 import django_filters
-from django.db.models import Q
+from django.db.models import CharField, Q, Value
+from django.db.models.functions import Concat
 from django.utils.translation import gettext_lazy as _
 
 from .models import User, UserCard
@@ -20,12 +21,17 @@ class UserSearchFilter(django_filters.FilterSet):
         if len(value) < 4:
             return queryset.none()
 
-        return queryset.filter(
-            Q(username__icontains=value)
-            | Q(email=value)
-            | Q(first_name__icontains=value)
-            | Q(last_name__icontains=value)
-        ).distinct()
+        return (
+            queryset.annotate(full_name=Concat("first_name", Value(" "), "last_name", output_field=CharField()))
+            .filter(
+                Q(username__icontains=value)
+                | Q(email__iexact=value)
+                | Q(first_name__icontains=value)
+                | Q(last_name__icontains=value)
+                | Q(full_name__iexact=value)
+            )
+            .distinct()
+        )
 
     def search_card(self, queryset, name, value):
         if not value.strip():
