@@ -342,7 +342,7 @@ class ContributorSerializer(ValidatedModelSerializer):
                 {"error": "This competition is currently locked down pending stage show, and no edits are permitted."}
             )
 
-        return super(CompetitionSerializer, self).update(instance, validated_data)
+        return super(ContributorSerializer, self).update(instance, validated_data)
 
 
 #
