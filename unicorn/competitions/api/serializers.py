@@ -11,6 +11,7 @@ from competitions.constants import (
     GENRE_CATEGORY_CHOICES,
 )
 from competitions.models import Competition, Contributor, Entry, File, Genre, Vote
+from core.api.serializers import NestedEventSerializer
 from guardian.shortcuts import assign_perm
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -84,6 +85,7 @@ class FileSerializer(ValidatedModelSerializer):
 
 class CompetitionSerializer(ValidatedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="competitions-api:competition-detail")
+    event = NestedEventSerializer()
     genre = NestedGenreSerializer()
     state = ChoiceField(choices=COMPETITION_STATE_CHOICES, read_only=True)
     next_state = ChoiceField(choices=COMPETITION_STATE_CHOICES, read_only=True)
@@ -102,6 +104,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
             "permissions",
             "id",
             "url",
+            "event",
             "genre",
             "name",
             "brief_description",

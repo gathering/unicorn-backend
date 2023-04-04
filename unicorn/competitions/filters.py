@@ -1,4 +1,5 @@
 import django_filters
+from core.models import Event
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from utilities.filters import NumericInFilter
@@ -30,6 +31,7 @@ class CompetitionFilter(django_filters.FilterSet):
         null_value=None,
         label=_("Category"),
     )
+    event = django_filters.ModelMultipleChoiceFilter(field_name="event", queryset=Event.objects.filter(visible=True))
     genre = django_filters.ModelMultipleChoiceFilter(field_name="genre", queryset=Genre.objects.all(), label=_("Genre"))
     name = django_filters.CharFilter()
     info = django_filters.CharFilter()

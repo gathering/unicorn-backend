@@ -37,6 +37,13 @@ class Genre(models.Model):
 
 
 class Competition(CreatedUpdatedModel, models.Model):
+    event = models.ForeignKey(
+        to="core.Event",
+        related_name="competitions",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
     genre = models.ForeignKey(
         verbose_name=_("Genre"),
         to="Genre",

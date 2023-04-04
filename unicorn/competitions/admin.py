@@ -13,7 +13,7 @@ class GenreAdmin(GuardedModelAdmin):
 @admin.register(Competition)
 class CompetitionAdmin(GuardedModelAdmin):
     list_display = ("name", "genre", "published", "state", "entries_count")
-    list_filter = ("genre__name", "published", "state")
+    list_filter = ("event__name", "genre__name", "published", "state")
 
 
 @admin.register(Entry)
