@@ -85,7 +85,7 @@ class FileSerializer(ValidatedModelSerializer):
 
 class CompetitionSerializer(ValidatedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="competitions-api:competition-detail")
-    event = NestedEventSerializer()
+    event = NestedEventSerializer(required=False)
     genre = NestedGenreSerializer()
     state = ChoiceField(choices=COMPETITION_STATE_CHOICES, read_only=True)
     next_state = ChoiceField(choices=COMPETITION_STATE_CHOICES, read_only=True)
