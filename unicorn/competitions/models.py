@@ -537,7 +537,7 @@ class Contributor(models.Model):
             if (self.pk and self.pk != exists.pk) or (not self.pk and exists):
                 errors.update({"user": "This user is already a contributor to selected entry!"})
 
-        if self.entry.status is not ENTRY_STATUS_DRAFT and (
+        if self.entry.status not in (ENTRY_STATUS_DRAFT, ENTRY_STATUS_NEW) and (
             self.entry.competition.contributor_extra and not self.extra_info
         ):
             errors.update({"extra_info": "Extra info is required in this competition"})
