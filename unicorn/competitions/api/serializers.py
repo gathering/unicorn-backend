@@ -177,6 +177,7 @@ class EntryContributorSerializer(WritableNestedSerializer):
         model = Contributor
         fields = ("obj_type", "id", "user", "extra_info", "is_owner")
 
+    @extend_schema_field(NestedUserSerializer)  # TODO: maybe redo this method to return the same schema in all cases?
     def get_user(self, instance, **kwargs):
         request = self.context.get("request", None)
         if request and request.user.has_perm("competitions.view_entry_crewmsg"):
@@ -269,7 +270,7 @@ class EntrySerializer(ValidatedModelSerializer):
         # finally check if we are the owner
         return self.context["request"].user.pk == owner["uuid"]
 
-    @extend_schema_field(NestedUserSerializer)
+    @extend_schema_field(NestedUserSerializer)  # TODO: maybe redo this method to return the same schema in all cases?
     def get_owner(self, obj):
         try:
             contributor = Contributor.objects.get(is_owner=True, entry_id=obj.pk)

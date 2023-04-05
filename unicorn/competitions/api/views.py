@@ -6,6 +6,8 @@ from competitions import filters
 from competitions.models import Competition, Contributor, Entry, Genre, Vote
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -71,12 +73,15 @@ class CompetitionViewSet(ModelViewSet):
 class DownloadViewSet(ReadOnlyModelViewSet):
     queryset = Competition.objects.prefetch_related("entries")
 
+    @extend_schema(exclude=True)
     def list(self, *args):
         raise MethodNotAllowed()
 
+    @extend_schema(exclude=True)
     def retrieve(self, *args, **kwargs):
         raise MethodNotAllowed()
 
+    @extend_schema(responses={(200, "application/zip"): OpenApiTypes.BINARY})
     @action(methods=["get"], detail=True, renderer_classes=(PassthroughRenderer,))
     def download(self, *args, **kwargs):
         compo = self.get_object()

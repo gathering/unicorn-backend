@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 
 from .parsers import TusUploadParser
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 TUS_SETTINGS = {}
 
 
+@extend_schema(exclude=True)  # TODO: these endpoints should be _properly_ typed
 class TusUpload(APIView):
     parser_classes = (TusUploadParser,)
 
