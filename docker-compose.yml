@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:14-alpine
     ports:
-      - "0.0.0.0:5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -13,7 +13,7 @@ services:
   cache:
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
 
   web:
     build:
@@ -23,7 +23,7 @@ services:
     volumes:
       - ./unicorn:/app/unicorn
     ports:
-      - 8000:8000
+      - "127.0.0.1:8000:8000"
     depends_on:
       - db
     env_file: .env
