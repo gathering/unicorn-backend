@@ -67,4 +67,8 @@ class LogoutView(View):
         response = HttpResponseRedirect(redirect_to)
         response.delete_cookie("session_key")
 
+        # frontend struggles to delete it's own cookies, let's help
+        response.delete_cookie("UNICORN_ACCESS_TOKEN")
+        response.delete_cookie("UNICORN_REFRESH_TOKEN")
+
         return response
