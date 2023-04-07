@@ -456,21 +456,25 @@ class Entry(CreatedUpdatedModel, models.Model):
         jury_weight = 1 - mortal_weight
 
         # Sum up the vote scores from non-jury votes on this entry, and return 0 if there is none
-        mortal_score = Vote.objects.filter(Q(entry=self), Q(jury=False)).aggregate(Sum("score"))["score__sum"]
-        if not mortal_score:
-            return 0
+        mortal_score = Vote.objects.filter(Q(entry=self), Q(jury=False)).aggregate(Sum("score"))["score__sum"] or 0
 
         # Sum all vote scores for the current competition
-        mortal_sum = Vote.objects.filter(Q(entry__competition=self.competition), Q(jury=False)).aggregate(Sum("score"))[
-            "score__sum"
-        ]
-        jury_sum = Vote.objects.filter(Q(entry__competition=self.competition), Q(jury=True)).aggregate(Sum("score"))[
-            "score__sum"
-        ]
+        mortal_sum = (
+            Vote.objects.filter(Q(entry__competition=self.competition), Q(jury=False)).aggregate(Sum("score"))[
+                "score__sum"
+            ]
+            or 0
+        )
+        jury_sum = (
+            Vote.objects.filter(Q(entry__competition=self.competition), Q(jury=True)).aggregate(Sum("score"))[
+                "score__sum"
+            ]
+            or 0
+        )
 
         # Calculate the vote score from jury votes on this entry
         if jury_sum:
-            jury_self = Vote.objects.filter(Q(entry=self), Q(jury=True)).aggregate(Sum("score"))["score__sum"]
+            jury_self = Vote.objects.filter(Q(entry=self), Q(jury=True)).aggregate(Sum("score"))["score__sum"] or 0
             jury_score = jury_self * (((mortal_sum / mortal_weight) * jury_weight) / jury_sum)
         else:
             jury_score = 0
