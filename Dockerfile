@@ -1,9 +1,9 @@
 ARG WORKDIR="/app"
 
-FROM python:3.10-alpine as base
+FROM python:3.11-alpine as base
 
 # Remember to also update in pyproject.toml
-ENV POETRY_VERSION=1.6.1
+ENV POETRY_VERSION=1.7.1
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONFAULTHANDLER 1
