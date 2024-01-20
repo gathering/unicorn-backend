@@ -25,10 +25,12 @@ env = environ.Env(
 )
 
 TESTING = sys.argv[1:2] == ["test"]
+
+env_file_name = ".env"
 if TESTING:
-    environ.Env.read_env(os.path.join(BASE_DIR, "development.example.env"))
-else:
-    environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+    env_file_name = ".env.testing"
+
+environ.Env.read_env(os.path.join(BASE_DIR, env_file_name))
 
 # Import required configuration parameters
 ALLOWED_HOSTS = CSRF_TRUSTED_ORIGINS = DATABASE = SECRET_KEY = None

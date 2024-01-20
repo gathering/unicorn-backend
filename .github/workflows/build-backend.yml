@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 env:
-  PYTHON_VERSION: "3.10"
+  PYTHON_VERSION: "3.11"
   POETRY_VERSION: "1.7.1" # Remember to also update in pyproject.toml
   IMAGE_NAME: unicorn-backend
 
@@ -32,8 +32,65 @@ jobs:
       - name: Execute Pre-Commit
         run: pre-commit run --show-diff-on-failure --color=always --all-files
 
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_USER: unicorn
+      DATABASE_NAME: unicorn
+      DATABASE_PASSWORD: insecure-password-0sy3wBnJs.#%@h2TrDsy?I*p#wU+MV
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: insecure-password-1KUkde2hxN4d3AvxhDsOkdsQTh4LE53c
+
+    services:
+      db:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          DATABASE_USER: ${{ env.DATABASE_USER }}
+          DATABASE_NAME: ${{ env.DATABASE_NAME }}
+          DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name test_db
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Run database initialization script
+        run: docker exec -i test_db /bin/bash < scripts/dbinit/initialize-database.sh
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: v1-venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Set pythonpath
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+      - name: Test
+        run: DATABASE_HOST=localhost poetry run python unicorn/manage.py test unicorn
+
   build:
-    needs: [validate]
+    needs: [validate, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,19 +1,23 @@
-version: '3.7'
+version: "3.7"
 
 services:
   db:
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - ./scripts/dbinit/:/docker-entrypoint-initdb.d/
     environment:
       - POSTGRES_PASSWORD=postgres
+    env_file: .env
+    restart: unless-stopped
 
   cache:
     image: redis:alpine
     ports:
-      - "127.0.0.1:6379:6379"
+      - "6379:6379"
+    restart: unless-stopped
 
   web:
     build:
@@ -23,9 +27,10 @@ services:
     volumes:
       - ./unicorn:/app/unicorn
     ports:
-      - "127.0.0.1:8000:8000"
+      - "8000:8000"
     depends_on:
       - db
+      - cache
     env_file: .env
 
 volumes:
