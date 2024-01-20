@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      SECRET_KEY: insecure-key-eSlYXB1jtPbe2ryD283vSJtpb0TQhJrV
       DATABASE_USER: unicorn
       DATABASE_NAME: unicorn
       DATABASE_PASSWORD: insecure-password-0sy3wBnJs.#%@h2TrDsy?I*p#wU+MV
