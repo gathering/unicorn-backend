@@ -37,6 +37,7 @@ jobs:
 
     env:
       SECRET_KEY: insecure-key-eSlYXB1jtPbe2ryD283vSJtpb0TQhJrV
+      REDIS_CONNECTION: redis://cache:6379/1
       DATABASE_USER: unicorn
       DATABASE_NAME: unicorn
       DATABASE_PASSWORD: insecure-password-0sy3wBnJs.#%@h2TrDsy?I*p#wU+MV
@@ -60,6 +61,11 @@ jobs:
           --name test_db
         ports:
           - 5432:5432
+
+      cache:
+        image: redis:alpine
+        ports:
+          - 6379:6379
 
     steps:
       - name: Check out repository
