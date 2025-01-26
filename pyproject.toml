@@ -5,10 +5,11 @@ description = "Unified Net-based Interface for Competition Organization, Rules a
 authors = ["Core:Systemstøtte <support@gathering.org>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
-django = "~5.0.1"
+django = "~5.0.11"
 djangorestframework = "~3.14.0"
 django-cors-headers = "~4.3.1"
 django-debug-toolbar = "~4.2.0"
@@ -32,13 +33,13 @@ coverage = "^7.4.0"
 
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "^6.1.0"
+flake8 = "^7.1.1"
 unittest2 = "^1.1.0"
-black = "^23.12.1"
+black = "^24.10.0"
 
 [build-system]
 # Remember to also update in Dockerfile and Github Workflow
-requires = ["poetry-core==1.7.1"]
+requires = ["poetry-core==1.8.5"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]

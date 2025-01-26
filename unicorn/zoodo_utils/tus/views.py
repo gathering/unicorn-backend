@@ -64,9 +64,9 @@ class TusUpload(APIView):
         response["Access-Control-Allow-Origin"] = "*"
         response["Access-Control-Allow-Methods"] = "PATCH,HEAD,GET,POST,OPTIONS"
         response["Access-Control-Expose-Headers"] = "Tus-Resumable,upload-length,upload-metadata,Location,Upload-Offset"
-        response[
-            "Access-Control-Allow-Headers"
-        ] = "Tus-Resumable,upload-length,upload-metadata,Location,Upload-Offset,content-type,X-Unicorn-Entry-Id,X-Unicorn-File-Type"  # noqa: E501
+        response["Access-Control-Allow-Headers"] = (
+            "Tus-Resumable,upload-length,upload-metadata,Location,Upload-Offset,content-type,X-Unicorn-Entry-Id,X-Unicorn-File-Type"  # noqa: E501
+        )
         response["Cache-Control"] = "no-store"
 
         return response
