@@ -1,15 +1,15 @@
 ARG WORKDIR="/app"
 
-FROM python:3.11-alpine as base
+FROM python:3.13-alpine AS base
 
 # Remember to also update in pyproject.toml
-ENV POETRY_VERSION=1.8.5
+ENV POETRY_VERSION=2.1.2
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONFAULTHANDLER=1
 
 
-FROM base as deps
+FROM base AS deps
 
 ARG WORKDIR
 WORKDIR ${WORKDIR}
@@ -40,4 +40,4 @@ ENV PATH="${WORKDIR}/.venv/bin:$PATH"
 COPY . .
 
 EXPOSE 80
-CMD gunicorn unicorn.wsgi --bind 0.0.0.0:80 -w 6 --chdir unicorn/ --access-logfile '-' --error-logfile '-'
+CMD ["gunicorn", "unicorn.wsgi", "--bind", "0.0.0.0:80", "-w", "6", "--chdir", "unicorn/", "--access-logfile", "-", "--error-logfile", "-"]

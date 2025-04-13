@@ -7,8 +7,8 @@ on:
     branches: ["main"]
 
 env:
-  PYTHON_VERSION: "3.11"
-  POETRY_VERSION: "1.8.5" # Remember to also update in pyproject.toml
+  PYTHON_VERSION: "3.13"
+  POETRY_VERSION: "2.1.2" # Remember to also update in pyproject.toml
   IMAGE_NAME: unicorn-backend
 
 jobs:
