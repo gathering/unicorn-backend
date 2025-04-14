@@ -40,4 +40,4 @@ ENV PATH="${WORKDIR}/.venv/bin:$PATH"
 COPY . .
 
 EXPOSE 80
-CMD ["gunicorn", "unicorn.wsgi", "--bind", "0.0.0.0:80", "-w", "6", "--chdir", "unicorn/", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["gunicorn", "unicorn.wsgi", "--bind", "0.0.0.0:80", "--preload", "-w", "6", "--chdir", "unicorn/", "--access-logfile", "-", "--error-logfile", "-"]
