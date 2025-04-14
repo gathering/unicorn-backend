@@ -314,7 +314,7 @@ REST_FRAMEWORK = {
     # "ALLOWED_VERSIONS": [REST_FRAMEWORK_VERSION],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
         "utilities.authentication.AuthenticateAnonymous",
     ),
     "DEFAULT_FILTER_BACKENDS": (
