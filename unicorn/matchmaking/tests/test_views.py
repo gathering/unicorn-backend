@@ -5,12 +5,12 @@ from accounts.constants import *  # noqa: F403
 from accounts.models import User
 from competitions.constants import *  # noqa: F403
 from competitions.models import Competition, Genre
-from django.test import TestCase
 from matchmaking.constants import *  # noqa: F403
 from matchmaking.models import MatchRequest
+from rest_framework.test import APITestCase
 
 
-class MatchRequestViewTest(TestCase):
+class MatchRequestViewTest(APITestCase):
     def setUp(self):
         # create a user
         self.user1 = User.objects.create_user(
@@ -99,7 +99,7 @@ class MatchRequestViewTest(TestCase):
             role="adc",
             text="mr4 best adc evuhr",
         )
-        self.response = self.client.login(username=self.user1.username, password="1234")
+        self.client.force_authenticate(user=self.user1)
 
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get("/api/matchmaking/requests/")
