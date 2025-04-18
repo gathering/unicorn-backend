@@ -116,6 +116,7 @@ class CompetitionSerializer(ValidatedModelSerializer):
             "visibility",
             "report_win_loss",
             "rsvp",
+            "header_image_file",
             "header_image",
             "header_credit",
             "sponsor_name",

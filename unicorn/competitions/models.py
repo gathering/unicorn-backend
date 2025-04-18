@@ -91,6 +91,14 @@ class Competition(CreatedUpdatedModel, models.Model):
     )
     rsvp = models.BooleanField(verbose_name=_("RSVP only"), default=False)
 
+    header_image_file = models.ImageField(
+        upload_to="competition",
+        verbose_name=_("Header Image File"),
+        null=True,
+        blank=True,
+        default=None,
+    )
+
     header_image = models.URLField(
         verbose_name=_("Header Image"),
         null=True,
@@ -344,8 +352,12 @@ class Competition(CreatedUpdatedModel, models.Model):
             errors.update({"team_max": _("Maximum Team Size cannot be smaller than the minimum size")})
 
         # Make sure header image is credited
-        if self.header_image and not self.header_credit:
+        if (self.header_image_file or self.header_image) and not self.header_credit:
             errors.update({"header_credit": _("Please add credit for the header image")})
+
+        # Make sure only one of header_image_file or header_image is set
+        if self.header_image_file and self.header_image:
+            errors.update({"header_image": _("Please only set one of the header image fields")})
 
         if errors:
             raise ValidationError(errors)
