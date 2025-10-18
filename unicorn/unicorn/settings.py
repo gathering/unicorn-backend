@@ -100,7 +100,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 ANONYMOUS_USER_NAME = "Anonymous"
 GUARDIAN_GET_INIT_ANONYMOUS_USER = "utilities.permissions.get_anonymous_user_instance"
-GUARDIAN_MONKEY_PATCH = False
+GUARDIAN_MONKEY_PATCH_USER = False
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
