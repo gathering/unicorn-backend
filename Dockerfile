@@ -12,6 +12,7 @@ ENV PYTHONFAULTHANDLER=1
 FROM base AS deps
 
 ARG WORKDIR
+ARG INSTALL_DEV=false
 WORKDIR ${WORKDIR}
 
 # We need a compiler and some stuff
@@ -26,7 +27,11 @@ RUN pip install -U pip setuptools \
 # Install dependencies
 COPY poetry.lock pyproject.toml ./
 RUN poetry config virtualenvs.in-project true
-RUN poetry install --only main
+RUN if [ "$INSTALL_DEV" = "true" ]; then \
+    poetry install; \
+    else \
+    poetry install --only main; \
+    fi
 
 
 FROM base

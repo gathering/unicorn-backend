@@ -8,6 +8,9 @@ prepare:
 run:
 	@docker compose up -d
 
+runbuild:
+	@docker compose up -d --build
+
 migrate:
 	@docker compose exec web python unicorn/manage.py migrate
 
@@ -20,8 +23,8 @@ loadseed:
 
 test:
 	@docker compose exec web coverage run unicorn/manage.py test unicorn
+	@docker compose exec web coverage html -d unicorn/htmlcov
 
 coverage:
-	@docker compose exec web coverage report -m
-	@docker compose exec web coverage html -d unicorn/htmlcov
+# 	@docker compose exec web coverage report -m
 	@open unicorn/htmlcov/index.html
