@@ -1,4 +1,4 @@
-from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
+from rest_framework_guardian.filters import ObjectPermissionsFilter
 from utilities.api import ModelViewSet
 from utilities.permissions import StandardObjectPermissions
 
@@ -11,4 +11,4 @@ class EventViewSet(ModelViewSet):
     serializer_class = EventSerializer
 
     permission_classes = (StandardObjectPermissions,)
-    filter_backends = (DjangoObjectPermissionsFilter,)
+    filter_backends = (ObjectPermissionsFilter,)

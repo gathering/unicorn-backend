@@ -1,83 +1,51 @@
 import os
 import socket
 import sys
+from pathlib import Path
 
 import environ
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 from django.core.exceptions import ImproperlyConfigured
 
-try:
-    from unicorn import configuration
-except ImportError:
-    raise ImproperlyConfigured(
-        "Configuration file is not preset. Please define unicorn/unicorn/configuration.py per the documentation"
-    )
-
 VERSION = "7.0.0"
 REST_FRAMEWORK_VERSION = "7.0"
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+# Check if we are running tests
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = BASE_DIR.parent
 
-TESTING = sys.argv[1:2] == ["test"]
-
+# Initialize environment variables
 env_file_name = ".env"
 if TESTING:
     env_file_name = ".env.testing"
 
-environ.Env.read_env(os.path.join(BASE_DIR, env_file_name))
+env = environ.Env()
+environ.Env.read_env(os.path.join(ROOT_DIR, env_file_name))
 
-# Import required configuration parameters
-ALLOWED_HOSTS = CSRF_TRUSTED_ORIGINS = DATABASE = SECRET_KEY = None
-for setting in [
-    "ALLOWED_HOSTS",
-    "CSRF_TRUSTED_ORIGINS",
-    "DATABASE",
-    "SECRET_KEY",
-]:
-    try:
-        globals()[setting] = getattr(configuration, setting)
-    except AttributeError:
-        raise ImproperlyConfigured("Mandatory setting {} is missing from configuration.py.".format(setting))
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env("SECRET_KEY", default="")
+if not SECRET_KEY:
+    raise ImproperlyConfigured("SECRET_KEY must be set in environment variables")
 
-# Import optional configuration parameters
-ADMINS = getattr(configuration, "ADMINS", [])
-BASE_PATH = getattr(configuration, "BASE_PATH", "")
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env("DEBUG", cast=bool, default=False)
+INTERNAL_IPS = ("127.0.0.1", "::1", "172.20.0.1")
+
+
+BASE_PATH = env("BASE_PATH", default="")
 if BASE_PATH:
     BASE_PATH = BASE_PATH.strip("/") + "/"  # Enforce trailing slash only
-CORS_ORIGIN_ALLOW_ALL = getattr(configuration, "CORS_ORIGIN_ALLOW_ALL", False)
-CORS_ORIGIN_REGEX_WHITELIST = getattr(configuration, "CORS_ORIGIN_REGEX_WHITELIST", [])
-CORS_ORIGIN_WHITELIST = getattr(configuration, "CORS_ORIGIN_WHITELIST", [])
-DEBUG = getattr(configuration, "DEBUG", False)
-EMAIL = getattr(configuration, "EMAIL", {})
-LOGGING = getattr(configuration, "LOGGING", {})
-CACHES = getattr(
-    configuration,
-    "CACHES",
-    {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}},
-)
-MAX_PAGE_SIZE = getattr(configuration, "MAX_PAGE_SIZE", 500)
-MEDIA_ROOT = getattr(configuration, "MEDIA_ROOT", os.path.join(BASE_DIR, "media")).rstrip("/")
-PAGINATE_COUNT = getattr(configuration, "PAGINATE_COUNT", 50)
-DATE_FORMAT = getattr(configuration, "DATE_FORMAT", "N j, Y")
-DATETIME_FORMAT = getattr(configuration, "DATETIME_FORMAT", "N j, Y g:i a")
-SHORT_DATE_FORMAT = getattr(configuration, "SHORT_DATE_FORMAT", "Y-m-d")
-SHORT_DATETIME_FORMAT = getattr(configuration, "SHORT_DATETIME_FORMAT", "Y-m-d H:i")
-SHORT_TIME_FORMAT = getattr(configuration, "SHORT_TIME_FORMAT", "H:i:s")
-TIME_FORMAT = getattr(configuration, "TIME_FORMAT", "g:i a")
-TIME_ZONE = getattr(configuration, "TIME_ZONE", "UTC")
-AWS_ACCESS_KEY_ID = getattr(configuration, "AWS_ACCESS_ACCESS_KEY", "")
-AWS_SECRET_ACCESS_KEY = getattr(configuration, "AWS_SECRET_ACCESS_KEY", "")
-AWS_STORAGE_BUCKET_NAME = getattr(configuration, "AWS_STORAGE_BUCKET_NAME", "")
-AWS_S3_OBJECT_PARAMETERS = getattr(configuration, "AWS_S3_OBJECT_PARAMETERS", {})
 
-LOGIN_REQUIRED = False
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=["http://*", "https://*"])
 
+CORS_ORIGIN_ALLOW_ALL = env.bool("CORS_ORIGIN_ALLOW_ALL", default=True)
+CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST", default=[])
+CORS_ORIGIN_REGEX_WHITELIST = env.list("CORS_ORIGIN_REGEX_WHITELIST", default=[])
 CORS_ALLOW_HEADERS = default_headers + (
     "tus-resumable",
     "upload-length",
@@ -87,10 +55,73 @@ CORS_ALLOW_HEADERS = default_headers + (
     "X-Unicorn-File-Type",
 )
 
+
+# Logging configuration
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": env("LOG_LEVEL", default="WARNING"),
+    },
+}
+
+
+MEDIA_ROOT = env("MEDIA_ROOT", default=os.path.join(BASE_DIR, "media")).rstrip("/")
+
+MAX_PAGE_SIZE = env.int("MAX_PAGE_SIZE", default=1000)
+PAGINATE_COUNT = env.int("PAGINATE_COUNT", default=50)
+
+DATE_FORMAT = env("DATE_FORMAT", default="N j, Y")
+DATETIME_FORMAT = env("DATETIME_FORMAT", default="N j, Y g:i a")
+SHORT_DATE_FORMAT = env("SHORT_DATE_FORMAT", default="Y-m-d")
+SHORT_DATETIME_FORMAT = env("SHORT_DATETIME_FORMAT", default="Y-m-d H:i")
+SHORT_TIME_FORMAT = env("SHORT_TIME_FORMAT", default="H:i:s")
+
+TIME_FORMAT = env("TIME_FORMAT", default="g:i a")
+TIME_ZONE = env("TIME_ZONE", default="UTC")
+
+
 # Database
-configuration.DATABASE.update({"ENGINE": "django.db.backends.postgresql"})
-DATABASES = {"default": configuration.DATABASE}
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("DATABASE_NAME", default="unicorn"),
+        "USER": env("DATABASE_USER", default=""),
+        "PASSWORD": env("DATABASE_PASSWORD", default=""),
+        "HOST": env("DATABASE_HOST", default="localhost"),
+        "PORT": env("DATABASE_PORT", default=""),
+    }
+}
+
+
+# Cache
+# https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-CACHES
+
+REDIS_CONNECTION = env("REDIS_CONNECTION", default=None)
+if REDIS_CONNECTION:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_CONNECTION,
+            "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+            "KEY_PREFIX": "unicorn",
+        }
+    }
+else:
+    CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+
+
 # Authentication
+
+LOGIN_REQUIRED = False
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "oauth2_provider.backends.OAuth2Backend",
@@ -100,24 +131,26 @@ AUTH_USER_MODEL = "accounts.User"
 
 ANONYMOUS_USER_NAME = "Anonymous"
 GUARDIAN_GET_INIT_ANONYMOUS_USER = "utilities.permissions.get_anonymous_user_instance"
-GUARDIAN_MONKEY_PATCH = False
+GUARDIAN_MONKEY_PATCH_USER = False
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
-
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SESSION_COOKIE_AGE = env("SESSION_COOKIE_AGE", default=60 * 60 * 24 * 30)
 CONSENT_DURATION = env("CONSENT_DURATION", default=60 * 60 * 24 * 90)
 
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 ACHIEVEMENTS_WEBHOOK = env("ACHIEVEMENTS_WEBHOOK", default=None)
 
 # Email
-EMAIL_HOST = EMAIL.get("SERVER")
-EMAIL_PORT = EMAIL.get("PORT", 25)
-EMAIL_HOST_USER = EMAIL.get("USERNAME")
-EMAIL_HOST_PASSWORD = EMAIL.get("PASSWORD")
-EMAIL_TIMEOUT = EMAIL.get("TIMEOUT", 10)
-SERVER_EMAIL = EMAIL.get("FROM_EMAIL")
+
+EMAIL_HOST = env("EMAIL_SERVER", default="localhost")
+EMAIL_PORT = env.int("EMAIL_PORT", default=25)
+EMAIL_HOST_USER = env("EMAIL_USERNAME", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD", default="")
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=10)
+SERVER_EMAIL = env("EMAIL_FROM_EMAIL", default="")
 EMAIL_SUBJECT_PREFIX = "[Unicorn] "
 
 # Installed application
@@ -174,7 +207,7 @@ TAILWIND_APP_NAME = "theme"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR + "/templates/"],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -285,7 +318,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_ROOT = BASE_DIR + "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/{}static/".format(BASE_PATH)
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "project-static"),)
 SERVE_STATIC_FILES = os.environ.get("SERVE_STATIC_FILES", True)
@@ -352,9 +385,6 @@ SPECTACULAR_SETTINGS = {
     "OAUTH2_SCOPES": ["email"],
 }
 
-# Django debug toolbar
-INTERNAL_IPS = ("127.0.0.1", "::1", "172.20.0.1")
-
 OAUTH2_PROVIDER = {
     "SCOPES": {
         "identity": "Basic identity information",
@@ -370,7 +400,7 @@ WANNABE_APP_ID = ""
 WANNABE_API_KEY = ""
 
 
-TUS_UPLOAD_DIR = BASE_DIR + "/upload/"
+TUS_UPLOAD_DIR = os.path.join(ROOT_DIR, "upload")
 
 
 try:

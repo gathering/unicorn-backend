@@ -21,6 +21,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: "true"
     command: python unicorn/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./unicorn:/app/unicorn

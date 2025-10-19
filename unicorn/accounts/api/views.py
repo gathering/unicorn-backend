@@ -5,7 +5,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.serializers import CharField, ListSerializer
 from rest_framework.views import APIView
-from rest_framework_guardian.filters import DjangoObjectPermissionsFilter
+from rest_framework_guardian.filters import ObjectPermissionsFilter
 from utilities.api import ModelViewSet
 from utilities.permissions import IsAuthenticatedAndNotAnon, StandardObjectPermissions
 
@@ -21,7 +21,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
     permission_classes = (StandardObjectPermissions,)
-    filter_backends = (DjangoObjectPermissionsFilter,)
+    filter_backends = (ObjectPermissionsFilter,)
 
     @action(detail=False, methods=["get"], url_path="@me")
     def get_self(self, request):
