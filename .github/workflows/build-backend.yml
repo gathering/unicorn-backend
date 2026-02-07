@@ -8,7 +8,7 @@ on:
 
 env:
   PYTHON_VERSION: "3.13"
-  POETRY_VERSION: "2.2.1" # Remember to also update in pyproject.toml
+  POETRY_VERSION: "2.3.2" # Remember to also update in pyproject.toml
   IMAGE_NAME: unicorn-backend
 
 jobs:
@@ -17,18 +17,22 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
       - name: Set up python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+
       - name: Install Pre-Commit
         run: python -m pip install pre-commit && pre-commit install
+
       - name: Load cached Pre-Commit Dependencies
         id: cached-poetry-dependencies
         uses: actions/cache@v4
         with:
           path: ~/.cache/pre-commit/
           key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
       - name: Execute Pre-Commit
         run: pre-commit run --show-diff-on-failure --color=always --all-files
 
@@ -70,12 +74,15 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
       - name: Run database initialization script
         run: docker exec -i test_db /bin/bash < scripts/dbinit/initialize-database.sh
+
       - name: Set up python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
@@ -83,16 +90,20 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
+
       - name: Load cached venv
         id: cached-poetry-dependencies
         uses: actions/cache@v4
         with:
           path: .venv
           key: v1-venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
+
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
+
       - name: Set pythonpath
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
       - name: Test
         run: DATABASE_HOST=localhost poetry run python unicorn/manage.py test unicorn
 

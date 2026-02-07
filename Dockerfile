@@ -3,7 +3,7 @@ ARG WORKDIR="/app"
 FROM python:3.13-alpine AS base
 
 # Remember to also update in pyproject.toml
-ENV POETRY_VERSION=2.2.1
+ENV POETRY_VERSION=2.3.2
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONFAULTHANDLER=1

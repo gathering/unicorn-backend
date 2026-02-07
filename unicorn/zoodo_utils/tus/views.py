@@ -91,7 +91,7 @@ class TusUpload(APIView):
             return HttpResponse(status=405, content="Method Not Allowed")
 
         for kv in request.META.get("HTTP_UPLOAD_METADATA", None).split(","):
-            (key, value) = kv.split(" ")
+            key, value = kv.split(" ")
             metadata[key] = base64.b64decode(value)
 
         if metadata.get("filename", None) and metadata.get("filename").upper() in [
@@ -152,7 +152,7 @@ class TusUpload(APIView):
         if upload_metadata:
             for kv in upload_metadata.split(","):
                 if " " in kv:
-                    (key, value) = kv.split(" ")
+                    key, value = kv.split(" ")
                 else:
                     key = kv
                     value = ""

@@ -18,37 +18,37 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13"
-django = "~5.2.8"
+django = "~5.2.11"
 djangorestframework = "~3.16.1"
 django-cors-headers = "~4.9.0"
-django-debug-toolbar = "~6.0.0"
+django-debug-toolbar = "~6.2.0"
 django-filter = "~25.2.0"
 django-guardian = "~3.2.0"
 djangorestframework-guardian = "~0.4.0"
-django-oauth-toolkit = "~3.1.0"
+django-oauth-toolkit = "~3.2.0"
 drf-writable-nested = "==0.7.2"
-gunicorn = "~23.0.0"
+gunicorn = "~25.0.2"
 pytz = "~2025.2"
 python-dateutil = "~2.9.0"
 social-auth-app-django = "^5.6.0"
 django-environ = "~0.12.0"
 django-tailwind = "==3.8.0"
-drf-spectacular = "~0.28.0"
+drf-spectacular = "~0.29.0"
 django-redis = "~6.0.0"
-pillow = "^11.3.0"
-django-auditlog = "~3.3.0"
-psycopg = { extras = ["binary"], version = "^3.2.6" }
+pillow = "^12.1.0"
+django-auditlog = "~3.4.1"
+psycopg = { extras = ["binary"], version = "^3.3.2" }
 
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.3.0"
 unittest2 = "^1.1.0"
-black = "^25.9.0"
-coverage = "^7.11.0"
+black = "^26.1.0"
+coverage = "^7.13.3"
 
 [build-system]
 # Remember to also update in Dockerfile and Github Workflow
-requires = ["poetry-core==2.2.1"]
+requires = ["poetry-core==2.3.2"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
