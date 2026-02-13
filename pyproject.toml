@@ -35,7 +35,7 @@ django-environ = "~0.12.0"
 django-tailwind = "==3.8.0"
 drf-spectacular = "~0.29.0"
 django-redis = "~6.0.0"
-pillow = "^12.1.0"
+pillow = "^12.1.1"
 django-auditlog = "~3.4.1"
 psycopg = { extras = ["binary"], version = "^3.3.2" }
 
