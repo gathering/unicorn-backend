@@ -1,0 +1,36 @@
+---
+version: 2
+updates:
+  # Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:00"
+      timezone: "Europe/Oslo"
+    groups:
+      python:
+        patterns:
+          - "*"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:00"
+      timezone: "Europe/Oslo"
+    groups:
+      gha:
+        patterns:
+          - "*"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
