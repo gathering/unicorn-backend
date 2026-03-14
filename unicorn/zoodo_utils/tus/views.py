@@ -167,9 +167,10 @@ class TusUpload(APIView):
                 response.status_code = 409
                 return response
         except:  # noqa: E722
+            sanitized_metadata = {k: str(v).replace("\n", "\\n").replace("\r", "\\r") for k, v in metadata.items()}
             logger.error(
                 "Unable to access file",
-                extra={"request": request.META, "metadata": metadata},
+                extra={"metadata": sanitized_metadata},
             )
             # response.status_code = 409
             # return response
@@ -206,9 +207,9 @@ class TusUpload(APIView):
             f.close()
         except IOError as e:
             logger.error(
-                "Unable to create file: {}".format(e),
+                "Unable to create file: %s",
+                str(e).replace("\n", "\\n").replace("\r", "\\r"),
                 exc_info=True,
-                extra={"request": request},
             )
             response.status_code = 500
             return response
@@ -238,6 +239,13 @@ class TusUpload(APIView):
         response = self.get_tus_response()
 
         resource_id = kwargs.get("resource_id", None)
+
+        # Validate resource_id is a valid UUID to prevent path traversal
+        try:
+            uuid.UUID(resource_id)
+        except (ValueError, AttributeError, TypeError):
+            response.status_code = 400
+            return response
 
         filename = cache.get("tus-uploads/{}/filename".format(resource_id))
         file_size = int(cache.get("tus-uploads/{}/file_size".format(resource_id)) or 0)
@@ -288,7 +296,7 @@ class TusUpload(APIView):
         if file_size == new_offset:  # file transfer complete, rename from resource id to actual filename
             # logger.error("post_finish_check")
 
-            filename = uuid.uuid4().hex + "_" + filename
+            filename = uuid.uuid4().hex + "_" + os.path.basename(filename)
             shutil.move(upload_file_path, os.path.join(self.TUS_DESTINATION_DIR, filename))
             cache.delete_many(
                 [

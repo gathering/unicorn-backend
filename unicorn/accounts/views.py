@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 
 from .forms import LoginForm
@@ -31,7 +32,9 @@ class LoginView(View):
         provider = kwargs.get("provider", "")
 
         if not provider and request.user.is_authenticated:
-            redirect_to = request.GET.get("next", "") or reverse("accounts:profile")
+            redirect_to = request.GET.get("next", "")
+            if not url_has_allowed_host_and_scheme(redirect_to, allowed_hosts={request.get_host()}):
+                redirect_to = reverse("accounts:profile")
             return HttpResponseRedirect(redirect_to)
 
         form = LoginForm(request)
@@ -47,7 +50,9 @@ class LoginView(View):
 
             # determine where to direct user after successful regular login
             messages.info(request, "Logged in as {}.".format(request.user.display_name))
-            redirect_to = request.POST.get("next", "") or reverse("accounts:profile")
+            redirect_to = request.POST.get("next", "")
+            if not url_has_allowed_host_and_scheme(redirect_to, allowed_hosts={request.get_host()}):
+                redirect_to = reverse("accounts:profile")
             return HttpResponseRedirect(redirect_to)
 
         return render(request, self.template_name, {"form": form})
@@ -56,7 +61,9 @@ class LoginView(View):
 class LogoutView(View):
     def get(self, request):
         # prepare default redirect url
-        redirect_to = request.GET.get("next", "") or reverse("accounts:login")
+        redirect_to = request.GET.get("next", "")
+        if not url_has_allowed_host_and_scheme(redirect_to, allowed_hosts={request.get_host()}):
+            redirect_to = reverse("accounts:login")
 
         # only take real action if we are actually logged in
         if request.user and request.user.is_authenticated:
