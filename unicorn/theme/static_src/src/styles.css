@@ -1,3 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+@source "../../templates/**/*.html";
+@source "../../../templates/**/*.html";
+@source "../../../**/templates/**/*.html";
+@source "../../../**/*.py";
+
+@custom-variant mobile (@media (max-width: 768px));
+
+@theme {
+  --breakpoint-laptop: 1200px;
+  --breakpoint-desktop: 1600px;
+
+  --color-logo-primary: #f4772b;
+  --color-logo-secondary: #2ac4f4;
+}

@@ -702,21 +702,24 @@ hiredis = ["redis[hiredis] (>=4.0.2)"]
 
 [[package]]
 name = "django-tailwind"
-version = "3.8.0"
+version = "4.4.2"
 description = "Tailwind CSS Framework for Django projects"
 optional = false
-python-versions = ">=3.10.0,<4.0.0"
+python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "django_tailwind-3.8.0-py3-none-any.whl", hash = "sha256:fa969c5b95d314b173fe2b2ed2cb2c03f2e2c94fdc2c01ff73a993fa159085da"},
-    {file = "django_tailwind-3.8.0.tar.gz", hash = "sha256:31c2f4a7879d685c2de0feaf0b63f246200b37337bea4d7dbafb59bc3f10c008"},
+    {file = "django_tailwind-4.4.2-py3-none-any.whl", hash = "sha256:0e4a2836cb36e8952700457d049fadb8743583017cef80fa3a374f8597c289f4"},
+    {file = "django_tailwind-4.4.2.tar.gz", hash = "sha256:b3a3eb2d22cbb8c17565898fb68ccedcf806542b04fe4107bdfec7035d582819"},
 ]
 
 [package.dependencies]
-django = ">=3.2.14"
+django = ">=4.2.20"
+pytailwindcss = ">=0.3.0"
 
 [package.extras]
-reload = ["django-browser-reload (>=1.12.1,<2.0.0)"]
+cookiecutter = ["cookiecutter (>=2.6.0,<3)"]
+honcho = ["honcho (>=2.0.0,<3)"]
+reload = ["django-browser-reload (>=1.21.0,<2)"]
 
 [[package]]
 name = "djangorestframework"
@@ -1261,6 +1264,18 @@ crypto = ["cryptography (>=3.4.0)"]
 dev = ["coverage[toml] (==7.10.7)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=8.4.2,<9.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
 docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
 tests = ["coverage[toml] (==7.10.7)", "pytest (>=8.4.2,<9.0.0)"]
+
+[[package]]
+name = "pytailwindcss"
+version = "0.3.0"
+description = "Standalone Tailwind CSS CLI, installable via pip. Use Tailwind CSS without Node.js."
+optional = false
+python-versions = "<4.0,>=3.11"
+groups = ["main"]
+files = [
+    {file = "pytailwindcss-0.3.0-py3-none-any.whl", hash = "sha256:a9b770ad3c0a0f40073052bcfe81a060b550fed38af614a472f5aa7bb85fa8aa"},
+    {file = "pytailwindcss-0.3.0.tar.gz", hash = "sha256:1f71dd64020aacb40608dfe8725ca441c772016c344f757ccbc74b8b6143027d"},
+]
 
 [[package]]
 name = "python-dateutil"
@@ -1820,4 +1835,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "3176c1f29561e929be55a17f60c99849c2c7cfe1e0d9758e7a8c44451f4cffb0"
+content-hash = "b6e75e659e420433e2e24e5a254a09472c2b21864cd2d1233ecb3c5feb65f15e"
