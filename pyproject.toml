@@ -44,7 +44,7 @@ psycopg = { extras = ["binary"], version = "^3.3.3" }
 flake8 = "^7.3.0"
 unittest2 = "^1.1.0"
 black = "^26.3.1"
-coverage = "^7.13.4"
+coverage = "^7.13.5"
 
 [build-system]
 # Remember to also update in Dockerfile and Github Workflow
