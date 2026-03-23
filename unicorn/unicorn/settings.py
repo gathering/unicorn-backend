@@ -400,7 +400,7 @@ WANNABE_APP_ID = ""
 WANNABE_API_KEY = ""
 
 
-TUS_UPLOAD_DIR = os.path.join(ROOT_DIR, "upload")
+TUS_UPLOAD_DIR = os.path.join(BASE_DIR, "upload")
 
 
 try:
