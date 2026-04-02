@@ -566,7 +566,7 @@ class Contributor(models.Model):
         if self.is_owner:
             try:
                 old_owner = Contributor.objects.get(Q(entry=self.entry), Q(is_owner=True))
-                if self.pk and self.pk is not old_owner.pk:
+                if self.pk and self.pk != old_owner.pk:
                     old_owner.is_owner = False
                     old_owner.save()
             except ObjectDoesNotExist:

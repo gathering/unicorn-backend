@@ -69,6 +69,18 @@ def assure_compoadmin_entry_permissions(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Contributor)
+def assure_compoadmin_contributor_permissions(sender, instance, created, **kwargs):
+    if created:
+        try:
+            group = Group.objects.get(name="p-compoadmin-{}".format(str(instance.entry.competition.genre.category)))
+            assign_perm("view_contributor", group, instance)
+            assign_perm("change_contributor", group, instance)
+            assign_perm("delete_contributor", group, instance)
+        except Group.DoesNotExist:
+            pass
+
+
+@receiver(post_save, sender=Contributor)
 def contributor_permissions(instance, created, **kwargs):
     # find all other contributors in our entry
     theothers = Contributor.objects.filter(entry=instance.entry)
@@ -90,10 +102,15 @@ def contributor_permissions(instance, created, **kwargs):
     assign_perm("change_contributor", instance.user, instance)
     assign_perm("delete_contributor", instance.user, instance)
 
-    # grant modify permissions to the owner
-    owner = Contributor.objects.get(entry=instance.entry, is_owner=True)
-    assign_perm("change_contributor", owner.user, instance)
-    assign_perm("delete_contributor", owner.user, instance)
+    # grant modify permissions to the owner on all contributors in this entry
+    try:
+        owner = Contributor.objects.get(entry=instance.entry, is_owner=True)
+    except Contributor.DoesNotExist:
+        return
+    all_contributors = Contributor.objects.filter(entry=instance.entry)
+    for contrib in all_contributors:
+        assign_perm("change_contributor", owner.user, contrib)
+        assign_perm("delete_contributor", owner.user, contrib)
 
 
 @receiver(post_save, sender=Contributor)
