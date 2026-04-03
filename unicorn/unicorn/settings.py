@@ -54,6 +54,17 @@ CORS_ALLOW_HEADERS = default_headers + (
     "X-Unicorn-Entry-Id",
     "X-Unicorn-File-Type",
 )
+CORS_EXPOSE_HEADERS = [
+    "Tus-Resumable",
+    "Tus-Version",
+    "Tus-Extension",
+    "Tus-Max-Size",
+    "Upload-Offset",
+    "Upload-Length",
+    "Location",
+    "upload-length",
+    "upload-metadata",
+]
 
 
 # Logging configuration
