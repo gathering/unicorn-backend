@@ -540,7 +540,7 @@ class Contributor(models.Model):
         on_delete=models.CASCADE,
         related_name="user_to_entry",
     )
-    extra_info = models.CharField(verbose_name=_("Extra Info"), max_length=64, blank=True, null=True)
+    extra_info = models.CharField(verbose_name=_("Extra Info"), max_length=128, blank=True, null=True)
     is_owner = models.BooleanField(verbose_name=_("Entry Owner"), default=False)
 
     def clean(self):
