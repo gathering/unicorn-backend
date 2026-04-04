@@ -1,3 +1,4 @@
+import django.dispatch
 from competitions.constants import (
     COMPETITION_STATE_VOTE,
     COMPETITION_VISIBILITY_CREW,
@@ -10,8 +11,8 @@ from django.contrib.auth.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from guardian.shortcuts import assign_perm, remove_perm
-from zoodo_utils.tus.signals import tus_upload_finished_signal
-from zoodo_utils.tus.views import TusUpload
+
+tus_upload_finished_signal = django.dispatch.Signal()
 
 
 @receiver(post_save, sender=Competition)
@@ -136,7 +137,7 @@ def adjust_entry_permissions_for_contributor(sender, instance, created, **kwargs
         remove_perm("delete_entry", instance.user, instance.entry)
 
 
-@receiver(tus_upload_finished_signal, sender=TusUpload)
+@receiver(tus_upload_finished_signal)
 def register_file_upload(sender, **kwargs):
     data = {
         "name": kwargs["metadata"]["filename"],
