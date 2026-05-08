@@ -18,7 +18,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13"
-django = "~5.2.13"
+django = "~5.2.14"
 djangorestframework = "~3.17.1"
 django-cors-headers = "~4.9.0"
 django-debug-toolbar = "~6.3.0"
@@ -28,7 +28,7 @@ djangorestframework-guardian = "~0.4.0"
 django-oauth-toolkit = "~3.2.0"
 drf-writable-nested = "==0.7.2"
 gunicorn = "~25.3.0"
-pytz = "~2026.1"
+pytz = "~2026.2"
 python-dateutil = "~2.9.0"
 social-auth-app-django = "^5.9.0"
 django-environ = "~0.13.0"
@@ -37,7 +37,7 @@ drf-spectacular = "~0.29.0"
 django-redis = "~6.0.0"
 pillow = "^12.2.0"
 django-auditlog = "~3.4.1"
-psycopg = { extras = ["binary"], version = "^3.3.3" }
+psycopg = { extras = ["binary"], version = "^3.3.4" }
 
 
 [tool.poetry.group.dev.dependencies]
