@@ -647,14 +647,14 @@ drf = ["djangorestframework"]
 
 [[package]]
 name = "django-guardian"
-version = "3.3.1"
+version = "3.3.2"
 description = "Per object permissions for Django"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "django_guardian-3.3.1-py3-none-any.whl", hash = "sha256:2a3a4b94cdc7e8fc99b74eef163db69d17703dc397c3e9085c7231f2b2bcf431"},
-    {file = "django_guardian-3.3.1.tar.gz", hash = "sha256:7a50eada72161e355a9dbf9fe0838855c0ec851dd9b39f4f16e2decb5f4c7988"},
+    {file = "django_guardian-3.3.2-py3-none-any.whl", hash = "sha256:d5245d6be77a6c632f5b0c739221a44e6469dfa4925c75653ea49cec388e6765"},
+    {file = "django_guardian-3.3.2.tar.gz", hash = "sha256:f8edcf1576eb15d1593e23955693723ef351a7340667f9159e7bec786559c1ab"},
 ]
 
 [package.dependencies]
@@ -702,14 +702,14 @@ hiredis = ["redis[hiredis] (>=4.0.2)"]
 
 [[package]]
 name = "django-tailwind"
-version = "4.4.2"
+version = "4.5.0"
 description = "Tailwind CSS Framework for Django projects"
 optional = false
 python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "django_tailwind-4.4.2-py3-none-any.whl", hash = "sha256:0e4a2836cb36e8952700457d049fadb8743583017cef80fa3a374f8597c289f4"},
-    {file = "django_tailwind-4.4.2.tar.gz", hash = "sha256:b3a3eb2d22cbb8c17565898fb68ccedcf806542b04fe4107bdfec7035d582819"},
+    {file = "django_tailwind-4.5.0-py3-none-any.whl", hash = "sha256:618314751e867e8871b1e06ed98c0b8beb762ac9b431f739647ad4d82ab8b125"},
+    {file = "django_tailwind-4.5.0.tar.gz", hash = "sha256:c4b40820663ac3932f6951b82b91e3773361a46d9bde972bc8a338eee3c5d045"},
 ]
 
 [package.dependencies]
@@ -1838,4 +1838,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "638b2a97e6383650b045c2cb3bbf3277999f082fd1b9f35010ceaf3ee73de9fa"
+content-hash = "383e286b0eb06ccbd78b64f4720643128ad766c7423095ee8337b30b89c87889"
