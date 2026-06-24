@@ -1,3 +1,4 @@
+from competitions.views import TusUpload
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path, reverse_lazy
@@ -8,7 +9,6 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from zoodo_utils.tus.views import TusUpload
 
 from unicorn.views import APIHealthView, APIRootView
 
