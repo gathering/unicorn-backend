@@ -185,7 +185,6 @@ INSTALLED_APPS = [
     "utilities",
     "accounts",
     "oauth2_provider",
-    "zoodo_utils.tus",
     "social_django",
     "tailwind",
     "theme",
