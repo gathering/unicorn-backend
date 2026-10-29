@@ -19,10 +19,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -31,7 +31,7 @@ jobs:
 
       - name: Load cached Pre-Commit Dependencies
         id: cached-poetry-dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/pre-commit/
           key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
@@ -78,13 +78,13 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Run database initialization script
         run: docker exec -i test_db /bin/bash < scripts/dbinit/initialize-database.sh
 
       - name: Set up python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -98,7 +98,7 @@ jobs:
 
       - name: Load cached venv
         id: cached-poetry-dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .venv
           key: v1-venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
@@ -120,14 +120,14 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Build image
         run: docker build . -f Dockerfile --tag image
 
       - name: Log in to the Container registry
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
