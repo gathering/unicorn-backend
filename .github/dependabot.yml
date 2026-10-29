@@ -1,7 +1,11 @@
 ---
 version: 2
+
+# Security updates ignore schedule and cooldown. Enable "Dependabot security
+# updates" in the repo's Code security settings for them to be raised.
+
 updates:
-  # Python dependencies
+  # Python (poetry.lock / pyproject.toml)
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -9,16 +13,82 @@ updates:
       day: "friday"
       time: "16:00"
       timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 4
     groups:
-      python:
-        patterns:
-          - "*"
-    ignore:
-      # Ignore major version updates
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      # Security updates: one PR for all non-major fixes. Majors get their own PR.
+      security-patches:
+        applies-to: security-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      # Released in lockstep (app-django pins the supported social-auth-core range),
+      # so all update types, majors included, move together.
+      social-auth:
+        patterns: ["social-auth-*"]
+      # Everything else: minor/patch only. Majors get individual PRs.
+      catch-all:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+    labels: ["dependencies", "dependabot", "python"]
 
-  # GitHub Actions dependencies
+  # Node (django-tailwind theme build tooling)
+  - package-ecosystem: "npm"
+    directory: "/unicorn/theme/static_src"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:00"
+      timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 4
+    groups:
+      security-patches:
+        applies-to: security-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*", "postcss*"]
+      catch-all:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+    labels: ["dependencies", "dependabot", "javascript"]
+
+  # Base images in Dockerfile
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:00"
+      timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
+    ignore:
+      # The Python version is also set in pyproject.toml and the CI workflow,
+      # so it is bumped by hand, in all places at once.
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+    labels: ["dependencies", "dependabot", "docker"]
+
+  # Images in docker-compose.yml (postgres, redis)
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "16:00"
+      timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
+    ignore:
+      # Major database upgrades need a migration plan, and CI uses the same version.
+      - dependency-name: "postgres"
+        update-types: ["version-update:semver-major"]
+    labels: ["dependencies", "dependabot", "docker"]
+
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -26,11 +96,9 @@ updates:
       day: "friday"
       time: "16:00"
       timezone: "Europe/Oslo"
+    cooldown:
+      default-days: 3
     groups:
-      gha:
-        patterns:
-          - "*"
-    ignore:
-      # Ignore major version updates
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      actions:
+        patterns: ["*"]
+    labels: ["dependencies", "dependabot", "github-actions"]
