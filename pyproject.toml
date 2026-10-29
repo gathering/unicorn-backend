@@ -34,7 +34,7 @@ social-auth-app-django = "^5.9.0"
 django-environ = "~0.14.0"
 django-tailwind = "~4.6.0"
 drf-spectacular = "~0.30.0"
-django-redis = "~6.0.0"
+django-redis = "~7.0.0"
 pillow = "^13.0.0"
 django-auditlog = "~3.4.1"
 psycopg = { extras = ["binary"], version = "^3.3.6" }
